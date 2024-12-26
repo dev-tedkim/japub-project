@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="joinBox">
+      <form name="joinForm" autocomplete="off">
+        <div class="joinHeader">
+          <span class="title">회원가입</span>
+        </div>
+        <div class="joinInputDiv">
+          <input type="text" name="userId" placeholder="아이디" autofocus />
+          <span class="errorMsg">id is empty!</span>
+        </div>
+        <div class="joinInputDiv">
+          <input type="password" name="userPassword" placeholder="비밀번호" />
+        </div>
+        <div class="joinInputDiv">
+          <input type="text" name="userBirth" placeholder="생년월일" />
+        </div>
+        <div class="joinInputDiv">
+          <input type="text" name="userEmail" placeholder="이메일" />
+        </div>
+        <div class="findAddress">
+          <div>
+            <input type="text" id="sample6_postcode" name="userZipCode" placeholder="우편번호" />
+            <input type="button" onclick="sample6_execDaumPostcode()" value="검색" />
+          </div>
+          <span class="errorMsg">id is empty!</span>
+        </div>
+        <div class="joinInputDiv">
+          <input type="text" id="sample6_address" name="userAddress" placeholder="주소" />
+        </div>
+        <div class="joinInputDiv">
+          <input
+            type="text"
+            id="sample6_detailAddress"
+            name="userDetailAddress"
+            placeholder="상세주소"
+          />
+        </div>
+        <div class="joinInputDiv">
+          <input type="submit" class="submit" value="가입" />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
