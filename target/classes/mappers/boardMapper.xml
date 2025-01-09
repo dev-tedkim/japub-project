@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.example.spring61.domain.mapper.BoardMapper">
+	<insert id="insert">
+		<selectKey order="BEFORE" resultType="long"
+			keyProperty="boardNum">
+			SELECT SEQ_BOARD.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TBL_BOARD
+		(BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, USER_NUM, Board_Category)
+		VALUES(#{boardNum}, #{boardTitle}, #{boardContent}, #{userNum}, #{boardCategory})
+	</insert>
+
+	<update id="update">
+		UPDATE TBL_BOARD
+		SET BOARD_TITLE = #{boardTitle},
+		BOARD_CONTENT = #{boardContent},
+		BOARD_UPDATE_DATE = SYSDATE
+		WHERE BOARD_NUM = #{boardNum} AND USER_NUM = #{userNum}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TBL_BOARD
+		WHERE BOARD_NUM = #{boardNum}
+		AND USER_NUM = #{userNum}
+	</delete>
+
+	<update id="updateBoardHitByBoardNum">
+		UPDATE TBL_BOARD
+		SET BOARD_HIT = BOARD_HIT + 1
+		WHERE
+		BOARD_NUM = #{boardNum}
+	</update>
+
+	<select id="findByBoardNum" resultType="boardDto">
+		SELECT BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_REGISTER_DATE,
+		BOARD_HIT, B.USER_NUM, USER_ID, BOARD_UPDATE_DATE, BOARD_CATEGORY
+		FROM TBL_USER U JOIN TBL_BOARD B ON BOARD_NUM = #{boardNum} AND U.USER_NUM = B.USER_NUM
+	</select>
+
+	<select id="getTotal" resultType="_int">
+		SELECT COUNT(BOARD_NUM) FROM TBL_BOARD
+		WHERE BOARD_CATEGORY = #{category}
+		<include refid="search" />
+	</select>
+
+	<select id="findAllByCriteria" resultType="boardDto">
+		SELECT R, BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_REGISTER_DATE,
+		BOARD_HIT, USER_NUM, BOARD_UPDATE_DATE, BOARD_CATEGORY, USER_ID
+		FROM
+		(
+		SELECT ROWNUM R, BOARD_NUM, BOARD_TITLE, BOARD_CONTENT,
+		BOARD_REGISTER_DATE,
+		BOARD_HIT, USER_NUM, BOARD_UPDATE_DATE,
+		BOARD_CATEGORY, USER_ID
+		FROM
+		(
+		SELECT BOARD_NUM, BOARD_TITLE,
+		BOARD_CONTENT, BOARD_REGISTER_DATE,
+		BOARD_HIT, B.USER_NUM,
+		BOARD_UPDATE_DATE, BOARD_CATEGORY, USER_ID
+		FROM TBL_USER U JOIN
+		TBL_BOARD B ON BOARD_CATEGORY = #{category}
+		<include refid="search" />
+		AND U.USER_NUM = B.USER_NUM
+		ORDER BY BOARD_NUM DESC
+		)
+		<![CDATA[ WHERE ROWNUM <= #{endRow} ]]>
+		)
+		<![CDATA[WHERE R >= #{startRow} ]]>
+	</select>
+
+	<sql id="search">
+		<if test="type != null and keyword != null">
+			<trim prefixOverrides="or" prefix="and(" suffix=")">
+				<foreach collection="types" item="type">
+					<trim prefix="or">
+						<choose>
+							<when test="type == 'T'.toString()">
+								BOARD_TITLE LIKE '%'||#{keyword}||'%'
+							</when>
+							<when test="type == 'C'.toString()">
+								BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+							</when>
+							<when test="type == 'I'.toString()">
+								USER_ID LIKE '%'||#{keyword}||'%'
+							</when>
+						</choose>
+					</trim>
+				</foreach>
+			</trim>
+		</if>
+	</sql>
+
+</mapper>
+
+
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.example.spring61.domain.dto.UserDto" alias="userDto"/>
+		<typeAlias type="com.example.spring61.domain.dto.BoardDto" alias="boardDto"/>
+		<typeAlias type="com.example.spring61.domain.dto.CommentDto" alias="commentDto"/>
+		<typeAlias type="com.example.spring61.domain.dto.Criteria" alias="criteria"/>
+		<typeAlias type="com.example.spring61.domain.dto.FileDto" alias="fileDto"/>
+	</typeAliases>
+</configuration>

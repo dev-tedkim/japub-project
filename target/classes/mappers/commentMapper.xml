@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring61.domain.mapper.CommentMapper">
+	<insert id="insert">
+		<selectKey keyProperty="cno" order="BEFORE" resultType="long">
+			SELECT SEQ_REPLY.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TBL_COMMENT
+		(CNO, PCNO, COMMENT_CONTENT, USER_NUM, BOARD_NUM, PID)
+		VALUES(#{cno}, #{pcno}, #{commentContent},  #{userNum}, #{boardNum}, #{pid})
+	</insert>
+	
+	<update id="update">
+		UPDATE TBL_COMMENT
+		SET COMMENT_CONTENT = #{commentContent}, COMMENT_UPDATE_DATE = SYSDATE
+		WHERE CNO = #{cno}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM TBL_COMMENT
+		WHERE CNO = #{cno} AND USER_NUM = #{userNum}
+	</delete>
+	
+	<select id="getTotalByBoardNum" resultType="_int">
+		SELECT COUNT(CNO) FROM TBL_COMMENT
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	
+	<select id="findByBoardNumAndCriteria" resultType="commentDto">
+		SELECT ROWNUM, CNO, PCNO, COMMENT_CONTENT, COMMENT_REGISTER_DATE, USER_NUM, BOARD_NUM, PID, COMMENT_UPDATE_DATE, USER_ID FROM
+		(
+			SELECT CNO, NVL(PCNO,CNO) PCNO, COMMENT_CONTENT, COMMENT_REGISTER_DATE, C.USER_NUM, BOARD_NUM, PID, COMMENT_UPDATE_DATE, USER_ID
+			FROM TBL_USER U JOIN TBL_COMMENT C ON BOARD_NUM = #{boardNum} AND U.USER_NUM = C.USER_NUM
+			ORDER BY PCNO, CNO
+		)
+		<![CDATA[ WHERE ROWNUM <= #{criteria.endRow} ]]>
+	</select>
+</mapper>
+

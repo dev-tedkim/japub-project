@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring61.domain.mapper.UserMapper">
+  <select id="findByUserNum" resultType="userDto">
+  	SELECT USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_BIRTH, USER_ROLE
+	FROM TBL_USER WHERE USER_NUM = #{userNum}
+  </select>
+  
+  <insert id="insert">
+  	<selectKey order="BEFORE" keyProperty="userNum" resultType="long">
+  		SELECT SEQ_USER.NEXTVAL FROM DUAL
+  	</selectKey>
+  	INSERT INTO TBL_USER
+	(USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_BIRTH)
+	VALUES(#{userNum}, #{userId}, #{userPassword}, #{userEmail}, #{userZipCode}, #{userAddress}, #{userDetailAddress}, #{userBirth})
+  </insert>
+  
+  <select id="findByUserIdAndUserPassword" resultType="userDto">
+  	 	SELECT USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_BIRTH, USER_ROLE
+		FROM TBL_USER WHERE USER_ID = #{userId} AND USER_PASSWORD = #{userPassword}
+  </select>
+  
+  <update id="update">
+  	UPDATE TBL_USER
+  	SET USER_PASSWORD = #{userPassword}
+  	WHERE USER_NUM = #{userNum}
+  </update>
+  
+  <select id="findByUserNumAndUserPassword" resultType="userDto">
+  	 	SELECT USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_BIRTH, USER_ROLE
+		FROM TBL_USER WHERE USER_NUM = #{userNum} AND USER_PASSWORD = #{userPassword}
+  </select>
+  
+
+</mapper>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring61.domain.mapper.FileMapper">
+	<insert id="insert">
+		INSERT INTO TBL_FILE
+		(UUID, UPLOAD_PATH, FILE_TYPE, FILE_NAME, BOARD_NUM)
+		VALUES(#{uuid}, #{uploadPath}, #{fileType}, #{fileName}, #{boardNum})
+	</insert>
+	
+	<select id="findByBoardNum" resultType="fileDto">
+		SELECT UUID, UPLOAD_PATH, FILE_TYPE, FILE_NAME, BOARD_NUM
+		FROM TBL_FILE WHERE BOARD_NUM = #{boardNum}
+	</select>
+	
+	<delete id="deleteByBoardNum">
+		DELETE FROM TBL_FILE WHERE BOARD_NUM = #{boardNum}
+	</delete>
+</mapper>
+
+
+

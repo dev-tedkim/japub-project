@@ -1,0 +1,714 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Noto Sans KR', serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	height: 100vh; /* 화면 전체 높이를 사용 */
+	display: flex;
+	flex-direction: column; /* 세로 방향 레이아웃 */
+}
+
+.main {
+	flex: 1 1 auto;
+}
+
+a {
+	color: #000;
+}
+
+.header {
+	border-bottom: 1px solid rgb(235, 235, 235);
+	display: flex;
+	height: 80px;
+}
+
+.header>h1 {
+	width: 20%;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	justify-content: center;
+}
+
+.header>h1:hover {
+	color: red;
+}
+
+.header>nav {
+	width: 80%;
+	font-size: 15px;
+}
+
+.header>nav>ul {
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	height: 70px;
+	padding-right: 60px;
+}
+
+.header>nav>ul>li, .header>nav>ul>li a {
+	position: relative;
+	display: block;
+	width: 100px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	color: rgb(100, 100, 100);
+	padding: 0 5px;
+}
+
+.header>nav>ul>li a:hover {
+	background-color: rgb(240, 240, 240);
+	font-weight: bold;
+}
+
+ul.submenu {
+	position: absolute;
+	overflow: hidden;
+	transition: all 0.7s;
+	visibility: hidden;
+	z-index: 999;
+}
+/* header끝 -------------------------------*/
+footer {
+	height: 80px;
+	border-top: 1px solid #ccc;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: flex;
+}
+
+footer>h2 {
+	width: 20%;
+	cursor: pointer;
+}
+
+footer>h2:hover {
+	color: blue;
+}
+
+footer>nav {
+	width: 80%;
+}
+
+footer>nav>ul {
+	display: flex;
+	height: 70px;
+	align-items: center;
+	justify-content: right;
+	padding-right: 50px;
+}
+
+footer>nav>ul>li>a {
+	display: block;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	font-size: 15px;
+	margin-right: 30px;
+	font-weight: bold;
+	color: #000;
+}
+/* footer------------------------ */
+div.joinBox {
+	width: 400px;
+	margin: 9vh auto;
+	border: 1px solid rgb(240, 240, 240);
+	box-shadow: 0 2px 4px rgb(0, 0, 0, 0.1);
+	border-radius: 10px;
+	padding-bottom: 33.5px;
+}
+
+div.joinHeader {
+	padding: 33.5px 0;
+	text-align: center;
+}
+
+div.joinHeader>span {
+	font-weight: bold;
+	cursor: pointer;
+	color: blue;
+	font-size: 25px;
+}
+
+form[name='joinForm'] input {
+	border: 1px solid rgb(240, 240, 240);
+	outline-color: rgb(235, 235, 235);
+	border-radius: 6px;
+	height: 35px;
+	width: 300px;
+}
+
+form[name='joinForm'] input[type='button']:hover, form[name='joinForm'] input[type='submit']:hover
+	{
+	background-color: rgb(230, 230, 230);
+}
+
+div.joinInputDiv {
+	width: 300px;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+div.joinInputDiv>input[type='text'], div.joinInputDiv>input[type='password']
+	{
+	padding: 10px;
+}
+
+.errorMsg {
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	color: red;
+	margin-bottom: -7px;
+}
+
+.findAddress {
+	width: 300px;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+.findAddress>div {
+	display: flex;
+	justify-content: space-between;
+}
+
+.findAddress>div>input[type='text'] {
+	width: 235px;
+	padding: 10px;
+}
+
+.findAddress>div>input[type='button'] {
+	width: 60px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+div.joinInputDiv:last-child {
+	margin-bottom: 0;
+}
+
+div.joinInputDiv:last-child>input {
+	cursor: pointer;
+	font-weight: bold;
+}
+/* join -------------------------------------------*/
+div.loginBox {
+	width: 400px;
+	margin: 15vh auto;
+	box-sizing: border-box;
+	border: 1px solid rgb(220, 220, 220);
+	border-radius: 12px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+div.loginBox>header {
+	width: 400px;
+	text-align: center;
+	padding: 31.5px 0;
+}
+
+div.loginBox>header>span {
+	font-weight: bold;
+	color: blue;
+	font-size: 28px;
+	cursor: pointer;
+}
+
+form[name='loginForm']>input {
+	display: block;
+	width: 300px;
+	box-sizing: border-box;
+	height: 35px;
+	caret-color: blue;
+	outline: none;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+	padding: 0 10px;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+form[name='loginForm']>input[type='submit'] {
+	margin: 20px auto;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+form[name='loginForm']>input[type='submit']:hover {
+	background-color: #ccc;
+}
+
+form[name='loginForm']>div {
+	text-align: center;
+	margin: 30px 0 31.5px 0;
+}
+/* login -----------------------------------*/
+.pwCheckContainer {
+	margin: 15vh auto;
+	border: 1px solid rgb(240, 240, 240);
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 50px 30px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	width: 350px;
+}
+
+.pwCheckContainer>div:nth-child(1) {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+.pwCheckContainer>div:nth-child(2) {
+	margin-bottom: 15px;
+	font-size: 1rem;
+	color: #666;
+}
+
+.pwCheckContainer input[type='password'] {
+	display: block;
+	width: 100%;
+	height: 38px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	outline-color: rgb(230, 230, 230);
+	margin-bottom: 15px;
+}
+
+.pwCheckContainer input[type='submit'] {
+	display: block;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	height: 38px;
+	border-radius: 6px;
+	cursor: pointer;
+	width: 100%;
+}
+
+.pwCheckContainer input[type='submit']:hover {
+	background-color: #0056b3;
+}
+/* mypage password check -----------------------*/
+div.joinInputDiv>input.cancelChangePwBtn, div.joinInputDiv>input.changePwOkbtn
+	{
+	display: none;
+}
+
+div.joinInputDiv>input.cancelChangePwBtn {
+	font-weight: bold;
+	cursor: pointer;
+}
+/* mypage -------------------*/
+.listContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 7vh;
+}
+
+.listContainer>table {
+	width: 1000px;
+	border-collapse: collapse;
+	margin-bottom: 30px;
+	font-size: 15px;
+}
+
+.listContainer>table tr th, .listContainer>table tr td {
+	border-bottom: 1px solid rgb(249, 249, 249);
+	padding: 7px;
+	text-align: center;
+}
+
+.listContainer>table tr:nth-child(odd) {
+	background: rgb(249, 249, 249);
+}
+
+.listContainer>table caption {
+	text-align: right;
+	padding: 5px 0;
+}
+
+.listContainer>table caption>a {
+	padding: 6px 12px;
+	background: rgb(240, 240, 240);
+	cursor: pointer;
+	border-radius: 6px;
+	display: inline-block;
+}
+
+.listContainer>table caption>a:hover {
+	background: rgb(235, 235, 235);
+}
+
+.listContainer>table td.boardTitle>a:hover {
+	font-weight: bold;
+}
+
+.searchFormDiv {
+	display: flex;
+	justify-content: center;
+	width: 1000px;
+	background: rgb(249, 249, 249);
+	padding: 15px 0;
+}
+
+form[name=searchForm] {
+	display: flex;
+	width: 600px;
+}
+
+form[name=searchForm]>select, form[name=searchForm]>input[type=submit] {
+	display: block;
+	width: 150px;
+	border: 1px solid rgb(240, 240, 240);
+	outline-color: rgb(235, 235, 235);
+	cursor: pointer;
+	text-align: center;
+}
+
+form[name=searchForm]>input[type=submit]:hover {
+	background: rgb(235, 235, 235);
+}
+
+form[name=searchForm]>input[type=text] {
+	display: block;
+	width: 300px;
+	border: 1px solid rgb(240, 240, 240);
+	outline-color: rgb(235, 235, 235);
+	height: 35px;
+	padding: 8px;
+}
+
+.pageDiv {
+	margin: 30px 0;
+}
+
+.pageDiv>ul {
+	display: flex;
+}
+
+.pageDiv>ul>li>a {
+	display: block;
+	width: 25px;
+	height: 20px;
+	text-align: center;
+	line-height: 20px;
+}
+/* board list -----------------------------------*/
+div.writeContainer {
+	width: 50%;
+	margin: auto;
+	margin-top: 8vh;
+}
+
+div.writeContainer>section {
+	display: flex;
+	justify-content: space-between;
+	padding: 5px 0;
+	padding-left: 3px;
+	border-bottom: 1px solid #000;
+	align-items: flex-end;
+}
+
+div.writeContainer>section>span {
+	cursor: pointer;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.buttonBox>a {
+	display: inline-block;
+	padding: 6px 12px;
+	background-color: rgb(240, 240, 240);
+	cursor: pointer;
+	border-radius: 6px;
+	margin-right: 5px;
+}
+
+.buttonBox>a:last-child {
+	margin-right: 0;
+}
+
+.buttonBox>a:hover {
+	font-weight: bold;
+	background-color: rgb(230, 230, 230);
+}
+
+form[name='registerForm']>input[type='text'], form[name='registerForm']>textarea
+	{
+	background-color: rgb(249, 249, 249);
+	display: block;
+	width: 100%;
+	outline-color: rgb(235, 235, 235);
+	border: 1px solid rgb(240, 240, 240);
+	margin: 5px 0;
+	border-radius: 6px;
+	resize: none;
+	padding: 10px;
+}
+
+form[name='registerForm']>input[type='text'] {
+	height: 35px;
+}
+
+form[name='registerForm']>input[type='file'] {
+	display: block;
+	cursor: pointer;
+	margin: 10px 0;
+}
+
+.board-info {
+	margin: 5px auto;
+}
+
+.board-info>ul {
+	display: flex;
+	background-color: rgb(249, 249, 249);
+	border: 1px solid rgb(240, 240, 240);
+	border-radius: 6px;
+	justify-content: space-between;
+}
+
+.board-info>ul>li {
+	border-right: 1px solid rgb(230, 230, 230);
+	padding: 5px;
+	height: 35px;
+	flex: 1 1 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 15px;
+	white-space: nowrap;
+}
+
+.board-info>ul>li:last-child {
+	flex: 1.5 1 auto;
+	border-right: 0;
+}
+
+.board-info .icon {
+	margin-right: 2px;
+	cursor: pointer;
+}
+
+@media ( max-width : 900px) {
+	.board-info>ul>li {
+		font-size: 13px;
+	}
+}
+
+@media ( max-width : 670px) {
+	div.writeContainer {
+		width: 80%;
+	}
+}
+
+@media ( max-width : 440px) {
+	div.writeContainer {
+		width: 96%;
+	}
+}
+/* board detail --------------------------------*/
+div.writeContainer {
+	width: 50%;
+	margin: 8vh auto;
+}
+
+div.writeContainer>section {
+	display: flex;
+	justify-content: space-between;
+	padding: 5px 0;
+	padding-left: 3px;
+	border-bottom: 1px solid #000;
+	align-items: flex-end;
+}
+
+div.writeContainer>section>span {
+	cursor: pointer;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.buttonBox>a {
+	display: inline-block;
+	padding: 6px 12px;
+	background-color: rgb(240, 240, 240);
+	cursor: pointer;
+	border-radius: 6px;
+	margin-right: 5px;
+}
+
+.buttonBox>a:last-child {
+	margin-right: 0;
+}
+
+.buttonBox>a:hover {
+	font-weight: bold;
+	background-color: rgb(230, 230, 230);
+}
+
+form[name='registerForm']>input[type='text'], form[name='registerForm']>textarea
+	{
+	background-color: rgb(249, 249, 249);
+	display: block;
+	width: 100%;
+	outline-color: rgb(235, 235, 235);
+	border: 1px solid rgb(240, 240, 240);
+	margin: 5px 0;
+	border-radius: 6px;
+	resize: none;
+	padding: 10px;
+}
+
+form[name='registerForm']>input[type='text'] {
+	height: 35px;
+}
+
+form[name='registerForm']>input[type='file'] {
+	display: block;
+	cursor: pointer;
+	margin: 10px 0;
+} /* boardWrite */
+div.commentContainer {
+	width: 50%;
+	margin: 100px auto;
+}
+
+span.pid {
+	color: blue;
+	font-weight: bold;
+}
+
+div.commentContainer>ul>li {
+	border: 1px solid rgb(240, 240, 240);
+	border-bottom: 0;
+	padding: 18px;
+	padding-bottom: 0;
+	background-color: rgb(249, 249, 249);
+}
+
+div.commentContainer>ul>li:last-child {
+	border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+div.commentContainer>ul>li>span {
+	position: absolute;
+	font-size: 27px;
+	width: 27px;
+	height: 27px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+div.commentContainer .writer {
+	font-weight: bold;
+}
+
+div.commentContainer>ul>li>section {
+	margin-left: 30px;
+}
+
+div.commentContainer>ul>li>section>div:nth-child(3) {
+	font-size: 14px;
+	padding: 5px 0;
+}
+
+div.commentContainer>ul>li>section>div:nth-child(3)>a {
+	margin-left: 5px;
+}
+
+div.commentContainer>ul>li>section>div:nth-child(3)>a:hover {
+	font-weight: bold;
+}
+
+.commentContainer textarea {
+	resize: none;
+	border: none;
+	outline: none;
+	padding: 5px;
+	display: block;
+	width: 100%;
+	border-radius: 6px;
+}
+
+li.updateLi section>div.updateLiBtnDiv {
+	text-align: right;
+}
+
+div.commentContainer>ul>li.updateLi section>div.updateLiBtnDiv>a {
+	font-size: 16px;
+	display: inline-block;
+	margin: 0;
+}
+
+div.commentContainer>ul>li.updateLi section>div.updateLiBtnDiv>a:nth-child(1)
+	{
+	margin-right: 10px;
+}
+
+li.updateLi  updateLiBtnDiv>a.replySubmitBtn {
+	display: none;
+}
+
+div.showCommentBtn {
+	margin: 15px auto;
+	text-align: center;
+}
+
+div.showCommentBtn>a:hover {
+	font-weight: bold;
+}
+
+div.commentInput {
+	border: 1px solid rgb(240, 240, 240);
+	border-radius: 6px;
+}
+
+div.commentInput>div:nth-of-type(1) {
+	padding: 5px;
+	padding-bottom: 0;
+}
+
+div.commentInput>div:nth-of-type(2) {
+	padding: 5px;
+	text-align: right;
+}
+
+div.commentInput>div:nth-of-type(2)>a {
+	display: inline-block;
+	padding: 6px 12px;
+	background-color: rgb(235, 235, 235);
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+div.commentInput>div:nth-of-type(2)>a:hover {
+	background-color: rgb(230, 230, 230);
+}
+
+div.commentInput textarea {
+	padding: 0;
+	padding: 5px 7px;
+}
+
+.updateDiv>li.updateLi {
+	display: none;
+}
+/* comment ----------------------------------*/
