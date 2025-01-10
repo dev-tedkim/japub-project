@@ -81,9 +81,10 @@ $(".deleteBoardBtn").on("click", function(e) { /*게시글 삭제*/
 	location.href = $(this).attr("href");
 });
 
-function createFileSubmitInput($form) { /*파일 등록 input 생성*/
+
+function createFileInput($form) {
 	let html = "";
-	$(".thumbnailUl > li").each((i, li) => {
+	$("ul.thumbnailUl > li").each((i, li) => {
 		html += `<input type="hidden" name="files[${i}].uuid" value="${li.dataset.uuid}" />`;
 		html += `<input type="hidden" name="files[${i}].uploadPath" value="${li.dataset.uploadpath}" />`;
 		html += `<input type="hidden" name="files[${i}].fileName" value="${li.dataset.filename}" />`;
@@ -93,29 +94,26 @@ function createFileSubmitInput($form) { /*파일 등록 input 생성*/
 	$form.submit();
 }
 
-
 $("a.writeBoardBtn").on("click", function(e) { /*게시글 등록*/
 	e.preventDefault();
 	let formName = $(this).data("formname");
 	const $form = $(`form.${formName}`);
 	if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
 	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
-	createFileSubmitInput($form);
+	createFileInput($form);
 });
-/*
-function updateBoard(fileArr) {
-	$("a.updateBoardBtn").on("click", function(e) { 게시글 수정
-		e.preventDefault();
-		let formName = $(this).data("formname");
-		const $form = $(`form.${formName}`);
-		if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
-		if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
-		fileArr.forEach(file => {
-			fileService.remove(file);
-		});
-		createFileSubmitInput($form);
-	});
-}*/
+
+
+
+$("a.updateBoardBtn").on("click", function(e) { /*게시글 수정*/
+	e.preventDefault();
+	let formName = $(this).data("formname");
+	const $form = $(`form.${formName}`);
+	if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
+	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
+	createFileInput($form);
+});
+
 
 
 $("header > h1").on("click", function(e) { /*로고클릭시 메인화면으로*/

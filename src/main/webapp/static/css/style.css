@@ -712,3 +712,6 @@ div.commentInput textarea {
 	display: none;
 }
 /* comment ----------------------------------*/
+.thumbnailUl {
+	display: flex;
+}

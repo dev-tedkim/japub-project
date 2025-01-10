@@ -110,5 +110,5 @@
 <script src="<c:url value='/static/js/comment.js' />"></script>
 <script src="<c:url value='/static/js/file.js' />"></script>
 <script>commentService.showComments();</script>
-<script>fileService.getFiles();</script>
+<script>fileService.getFiles(true);</script>
 </html>

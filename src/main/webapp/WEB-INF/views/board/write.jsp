@@ -51,6 +51,5 @@
 <script src="<c:url value='/static/js/script.js' />"></script>
 <script src="<c:url value='/static/js/file.js' />"></script>
 <script>
-
 </script>
 </html>

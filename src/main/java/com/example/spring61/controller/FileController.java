@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -38,8 +36,6 @@ import com.example.spring61.domain.service.file.FileService;
 
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/files")
@@ -79,47 +75,62 @@ public class FileController {
 					files.add(fileDto);
 				} catch (IllegalStateException | IOException e) {
 					e.printStackTrace();
-					System.out.println("fileController upload error fileName = " + originalFileName);
+					return new ResponseEntity<List<FileDto>>(HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
 		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
 	}
 
-	@GetMapping("/{boardNum}")
-	public ResponseEntity<List<FileDto>> getFiles(@PathVariable Long boardNum) {
-		List<FileDto> files = fileService.findByBoardNum(boardNum);
-		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
+	private String getDatePath() {
+		return new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+	}
+
+	private boolean isFileType(File file) throws IOException {
+		String contentType = Files.probeContentType(file.toPath());
+		if (contentType == null) {
+			return false;
+		}
+		return contentType.startsWith("image");
 	}
 
 	@GetMapping("/display")
-	public ResponseEntity<byte[]> display(String fileName) throws UnsupportedEncodingException {
+	public ResponseEntity<byte[]> display(String fileName) {
+		byte[] result = null;
+		HttpHeaders header = new HttpHeaders();
+		File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
 		try {
-			File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
 			if (!file.exists()) {
 				return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
 			}
-			String contentType = Files.probeContentType(file.toPath());
-			HttpHeaders header = new HttpHeaders();
-			header.add("Content-Type", contentType);
-			byte[] result = FileCopyUtils.copyToByteArray(file);
-			return new ResponseEntity<byte[]>(result, header, HttpStatus.OK);
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = FileCopyUtils.copyToByteArray(file);
 		} catch (IOException e) {
 			e.printStackTrace();
+			return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<byte[]>(result, header, HttpStatus.OK);
 	}
 
-	@GetMapping("/download")
+	@GetMapping(value = "/{boardNum}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<FileDto>> getFiles(@PathVariable Long boardNum) {
+		List<FileDto> files = fileService.findByBoardNum(boardNum);
+		
+		if (files == null && files.isEmpty()) {
+			return new ResponseEntity<List<FileDto>>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<Resource> download(String fileName) {
-		System.out.println("fileName");
-		Resource resource = new FileSystemResource(new File(DEFAULT_DIRECTORY_PATH, fileName));
+		File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
+		Resource resource = new FileSystemResource(file);
 		if (!resource.exists()) {
 			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
 		}
 		String resourceName = resource.getFilename();
 		resourceName = resourceName.substring(resourceName.indexOf("_") + 1);
-		System.out.println(resourceName);
 		HttpHeaders header = new HttpHeaders();
 		try {
 			header.add("Content-Disposition",
@@ -131,37 +142,17 @@ public class FileController {
 	}
 
 	@DeleteMapping(value = "/{boardNum}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> delete(@RequestBody FileDto fileDto, @PathVariable Long boardNum) {
-		System.out.println("들어옴");
+	public ResponseEntity<String> delete(@RequestBody FileDto fileDto) {
 		String fileName = fileDto.getUploadPath() + "/t_" + fileDto.getUuid() + "_" + fileDto.getFileName();
 		File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
 		if (file.exists()) {
 			file.delete();
 		}
-		if (fileDto.isFileType()) {
-			fileName = fileName.replace("t_", "");
-			file = new File(DEFAULT_DIRECTORY_PATH, fileName);
-			if (file.exists()) {
-				file.delete();
-			}
+		file = new File(DEFAULT_DIRECTORY_PATH, fileName.replace("t_", ""));
+		if (file.exists()) {
+			file.delete();
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
-
-	private String getDatePath() {
-		return new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-	}
-
-	private boolean isFileType(File file) throws IOException {
-		String contentType = Files.probeContentType(file.toPath());
-		return contentType.startsWith("image");
-	}
-	
-
-	@PostMapping("/test")
-	public void test(@RequestBody FileDto FileDto) {
-		System.out.println("테스트 들어옴");
-	}
-	
 
 }
