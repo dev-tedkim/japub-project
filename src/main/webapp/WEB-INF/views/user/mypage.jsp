@@ -30,9 +30,12 @@
 					          <input type="password" name="userPassword" placeholder="비밀번호" value="${user.userPassword}" readonly="readonly" autoComplete="off" />
 							  <form:errors path="userPassword" cssClass="errorMsg"/>
 					        </div>
+					         <div class="joinInputDiv">
+					          <input type="password" name="userPasswordCheck" placeholder="비밀번호 재입력" autoComplete="off" />
+					        </div>
 					        <div class="joinInputDiv">
-					          <input type="text" name="userBirth" placeholder="생년월일" value="${user.userBirth}" readonly="readonly"/>
-					          <form:errors path="userBirth" cssClass="errorMsg"/>
+					          <input type="text" name="userPhoneNumber" placeholder="핸드폰" value="${user.userPhoneNumber}" readonly="readonly"/>
+					          <form:errors path="userPhoneNumber" cssClass="errorMsg"/>
 					        </div>
 					        <div class="joinInputDiv">
 					          <input type="text" name="userEmail" placeholder="이메일" value="${user.userEmail}" readonly="readonly"/>

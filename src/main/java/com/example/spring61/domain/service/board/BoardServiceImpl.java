@@ -42,7 +42,7 @@ public class BoardServiceImpl implements BoardService {
 				throw new RuntimeException("boardService insert error");
 			}
 			List<FileDto> files = boardDto.getFiles();
-			if (files != null) {
+			if (files != null && !files.isEmpty()) {
 				for (FileDto fileDto : files) {
 					fileDto.setBoardNum(boardDto.getBoardNum());
 					if (!fileService.insert(fileDto)) {
@@ -62,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 	public boolean update(BoardDto boardDto) {
 		try {
 			List<FileDto> files = boardDto.getFiles();
-			if (files != null) {
+			if (files != null && !files.isEmpty()) {
 				fileService.deleteByBoardNum(boardDto.getBoardNum());
 				for (FileDto fileDto : files) {
 					fileDto.setBoardNum(boardDto.getBoardNum());
@@ -75,7 +75,6 @@ public class BoardServiceImpl implements BoardService {
 				throw new RuntimeException("boardService update error");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		return true;

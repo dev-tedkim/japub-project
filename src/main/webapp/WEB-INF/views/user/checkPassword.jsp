@@ -20,7 +20,7 @@
 			 <div class="pwCheckContainer">
 			      <div><span>비밀번호 확인</span></div>
 			      <div><span>비밀번호를 입력해주세요.</span></div>
-			      <form id="passwordCheckForm" method="POST" >
+			      <form name="passwordCheckForm" method="POST" >
 			        <input type="password" name="userPassword" placeholder="비밀번호 입력"  />
 			        <input type="submit" value="확인" />
 			      </form>

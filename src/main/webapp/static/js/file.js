@@ -1,53 +1,65 @@
 let fileService = (function() {
-	function showThumbnail(formData) {
+	function showThumbnailImages(formData) {
 		$.ajax({
 			url: `${contextPath}/files`,
 			method: 'post',
+			data: formData,
 			contentType: false,
 			processData: false,
-			data: formData,
 			success: function(files) {
-				createThumbnail(files);
+				createThumbnailImages(files);
 			}
 		});
 	}
+
 	function getFiles(isDownload) {
-		$.getJSON(`${contextPath}/files/${boardNum}`, function(files) {
-			console.log(files);
-			createThumbnail(files, isDownload);
+		$.getJSON(`${contextPath}/files/${boardNum}`, function(files) { createThumbnailImages(files, isDownload); });
+	}
+
+	function remove(file) {
+		$.ajax({
+			url: `${contextPath}/files/${boardNum}`,
+			method: 'delete',
+			data: JSON.stringify(file),
+			contentType:'application/json;charset=UTF-8',
+			success: function() {
+				console.log("file delete ok");
+			}
 		});
 	}
-	return { showThumbnail: showThumbnail, getFiles: getFiles }
+
+	return { showThumbnailImages: showThumbnailImages, getFiles: getFiles, remove: remove }
 })();
 
 
 
-$("input[name=multipartFiles]").on("change", function(e) {
-	$(".thumbnailUl").empty();
-	let formData = new FormData();
+
+$("input[name=multipartFiles]").on("change", function() {
+	$("ul.thumbnailUl").empty();
 	let files = $(this)[0].files;
+	let formData = new FormData();
 	Array.from(files).forEach(file => {
 		if (!fileValidate(file.name, file.size)) {
-			return false;
+			return;
 		}
 		formData.append("multipartFiles", file);
 	});
-	fileService.showThumbnail(formData);
+	fileService.showThumbnailImages(formData);
 });
 
 
-
-function createThumbnail(files, isDownload = false) {
+function createThumbnailImages(files, isDownload = false) {
 	let html = "";
 	files.forEach(file => {
-		let fileName = `${file.uploadPath}/t_${file.uuid}_${file.fileName}`;
+		let thumbnailFileName = `${file.uploadPath}/t_${file.uuid}_${file.fileName}`;
+		let downloadFileName = thumbnailFileName.replace("t_", "");
 		html += `<li data-uuid="${file.uuid}" data-uploadpath="${file.uploadPath}" data-filename="${file.fileName}" data-filetype="${file.fileType}" >`;
-		html += isDownload ? `<a href="${contextPath}/files/download?fileName=${encodeURIComponent(fileName.replace("t_", ""))}" >` : ``;
-		html += file.fileType ? `<img src="${contextPath}/files/display?fileName=${encodeURIComponent(fileName)}" width="100" />` : `<img src="${contextPath}/static/image/attach.png" width="100" />`;
-		html += isDownload ? `</a>` : ``;
+		html += isDownload ? `<a href="${contextPath}/files/download?fileName=${encodeURIComponent(downloadFileName)}" >` : ``;
+		html += file.fileType ? `<img src="${contextPath}/files/display?fileName=${encodeURIComponent(thumbnailFileName)}" width="100" />` : `<img src="${contextPath}/static/image/attach.png" width="100" />`;
 		html += `</li>`;
+		html += isDownload ? `</a>` : '';
 	});
-	$(".thumbnailUl").empty().append(html);
+	$("ul.thumbnailUl").empty().append(html);
 }
 
 

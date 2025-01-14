@@ -15,12 +15,11 @@ public class UserValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
+		UserDto user = (UserDto)target;
 		ValidationUtils.rejectIfEmpty(errors, "userId", "required");
 		ValidationUtils.rejectIfEmpty(errors, "userPassword", "required");
 		ValidationUtils.rejectIfEmpty(errors, "userEmail", "required");
-		ValidationUtils.rejectIfEmpty(errors, "userBirth", "required");
-		ValidationUtils.rejectIfEmpty(errors, "userZipCode", "required");
-		ValidationUtils.rejectIfEmpty(errors, "userAddress", "required");
+		ValidationUtils.rejectIfEmpty(errors, "userPhoneNumber", "required");
 	}
 
 }

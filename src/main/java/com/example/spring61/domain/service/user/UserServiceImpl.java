@@ -69,4 +69,15 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
+
+	@Override
+	public UserDto findByUserId(String userId) {
+		try {
+			return userDao.findByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("userService findByUserId error");
+		}
+		return null;
+	}
 }

@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.spring61.domain.dto.UserDto;
@@ -31,6 +34,11 @@ public class UserController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.setValidator(new UserValidator());
+	}
+
+	@GetMapping("/term")
+	public void term() {
+
 	}
 
 	@GetMapping("/join")
@@ -112,12 +120,22 @@ public class UserController {
 
 	@PostMapping("/mypage")
 	public String mypage(UserDto userDto, RedirectAttributes attributes, HttpSession session) {
+
 		if (!userService.update(userDto)) {
 			attributes.addFlashAttribute("msg", ERROR_MSG);
 			return "redirect:/user/mypage?userNum=" + userDto.getUserNum();
 		}
 		session.invalidate();
 		return "redirect:/user/login";
+	}
+
+	@ResponseBody
+	@GetMapping("/checkId")
+	public ResponseEntity<Boolean> checkId(String userId) {
+		if (userService.findByUserId(userId) == null) {
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 	}
 
 	private void setLoginCookie(String userId, boolean rememberId, HttpServletResponse resp) {

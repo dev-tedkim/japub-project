@@ -10,4 +10,5 @@ public interface UserDao {
 	public abstract int update(UserDto userDto) throws Exception;
 	public abstract int insert(UserDto userDto) throws Exception;
 	public abstract UserDto findByUserNumAndUserPassword(@Param("userNum") Long userNum, @Param("userPassword") String userPassword) throws Exception;
+	public abstract UserDto findByUserId(String userId) throws Exception;
 }

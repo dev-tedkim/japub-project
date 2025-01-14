@@ -1,5 +1,8 @@
 package com.example.spring61.domain.service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,26 @@ public class ServiceTest {
 
 	@Test
 	public void test() {
-		System.out.println(fileService.findByBoardNum(4166l));
+		 /*String password = "mypassword";
+	        try {
+	            MessageDigest md = MessageDigest.getInstance("SHA-256");
+	            byte[] hashedBytes = md.digest(password.getBytes());
+
+	            // 바이트 배열을 16진수 문자열로 변환
+	            StringBuilder sb = new StringBuilder();
+	            for (byte b : hashedBytes) {
+	                sb.append(String.format("%02x", b));
+	            }
+	           String result = sb.toString();
+	           System.out.println(result);
+	        } catch (NoSuchAlgorithmException e) {
+	            throw new RuntimeException(e);
+	        }
+	       */
+	
+		String number = "010-3699-4975";
+		System.out.println(number.replaceAll("-", ""));
+	       
+	        
 	}
 }

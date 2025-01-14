@@ -38,4 +38,9 @@ public class UserDaoImpl implements UserDao{
 	public UserDto findByUserNumAndUserPassword(Long userNum, String userPassword) throws Exception {
 		return userMapper.findByUserNumAndUserPassword(userNum, userPassword);
 	}
+
+	@Override
+	public UserDto findByUserId(String userId) throws Exception {
+		return userMapper.findByUserId(userId);
+	}
 }

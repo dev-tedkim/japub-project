@@ -27,7 +27,7 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 	
-	<mvc:view-controller path="/main" view-name="main" />
+	<!-- <mvc:view-controller path="/main" view-name="main" /> -->
 
 	<mvc:resources location="/static/" mapping="/static/**" />
 

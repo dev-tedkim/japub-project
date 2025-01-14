@@ -16,6 +16,21 @@ document.querySelectorAll('nav>ul>li').forEach((li, i) => {
 	});
 });
 
+$(".termSubmitBtn").on("click", function(e) { /*회원가입약관체크*/
+	e.preventDefault();
+	if (!$("input[name=termAgree]").prop("checked")) {
+		alert("이용약관에 동의하셔야 회원가입을 하실 수 있습니다.");
+		return;
+	}
+	location.href = $(this).attr("href");
+});
+
+$(".termCancelBtn").on("click", function(e) { /*회원가입 약관 이전버튼*/
+	e.preventDefault();
+	let previousUrl = document.referrer || $(this).attr("href");
+	location.href = previousUrl;
+});
+
 $("form[name=loginForm]").on("submit", function(e) { /*login check*/
 	e.preventDefault();
 	if (!$(this).find("input[name=userId]").val().trim()) { alert("아이디를 입력하세요"); return; }
@@ -31,7 +46,7 @@ $("form[name=passwordCheckForm]").on("submit", function(e) { /*mypage passworChe
 })
 
 
-$(".changePwBtn").on("click", function(e) { /* 마이페이지 비밀번호변경 */
+$(".changePwBtn").on("click", function() { /* 마이페이지 비밀번호변경 */
 	$(this).hide();
 	$(this).next().show();
 	$mypageForm.find(".cancelChangePwBtn").show();
@@ -76,15 +91,16 @@ $(".deleteBoardBtn").on("click", function(e) { /*게시글 삭제*/
 	if (!confirm("정말로 삭제 하시겠습니까?")) { return; }
 	$(".thumbnailUl > li").each((i, li) => {
 		let file = { uuid: li.dataset.uuid, uploadPath: li.dataset.uploadpath, fileName: li.dataset.filename, fileType: li.dataset.filetype };
+		console.log(file);
 		fileService.remove(file);
 	});
 	location.href = $(this).attr("href");
 });
 
 
-function createFileInput($form) {
+function createFileInputs($form) {
 	let html = "";
-	$("ul.thumbnailUl > li").each((i, li) => {
+	$(".thumbnailUl > li").each((i, li) => {
 		html += `<input type="hidden" name="files[${i}].uuid" value="${li.dataset.uuid}" />`;
 		html += `<input type="hidden" name="files[${i}].uploadPath" value="${li.dataset.uploadpath}" />`;
 		html += `<input type="hidden" name="files[${i}].fileName" value="${li.dataset.filename}" />`;
@@ -100,7 +116,7 @@ $("a.writeBoardBtn").on("click", function(e) { /*게시글 등록*/
 	const $form = $(`form.${formName}`);
 	if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
 	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
-	createFileInput($form);
+	createFileInputs($form);
 });
 
 
@@ -111,7 +127,7 @@ $("a.updateBoardBtn").on("click", function(e) { /*게시글 수정*/
 	const $form = $(`form.${formName}`);
 	if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
 	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
-	createFileInput($form);
+	createFileInputs($form);
 });
 
 

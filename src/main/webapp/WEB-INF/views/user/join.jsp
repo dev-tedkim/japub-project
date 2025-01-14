@@ -24,29 +24,33 @@
 					        </div>
 					        <div class="joinInputDiv">
 					          <input type="text" name="userId" placeholder="아이디" autofocus value="${user.userId}"/>
-					          <form:errors path="userId" cssClass="errorMsg"/>
+					          <span class="errorMsg"></span>
 					        </div>
 					        <div class="joinInputDiv">
 					          <input type="password" name="userPassword" placeholder="비밀번호" value="${user.userPassword}"/>
-							  <form:errors path="userPassword" cssClass="errorMsg"/>
+							   <span class="errorMsg"></span>
 					        </div>
 					        <div class="joinInputDiv">
-					          <input type="text" name="userBirth" placeholder="생년월일" value="${user.userBirth}"/>
-					          <form:errors path="userBirth" cssClass="errorMsg"/>
+        					   <input type="password" name="userPasswordCheck" placeholder="비밀번호를 다시 입력해주세요" value="" />
+        					   <span class="errorMsg"></span>
+      						</div>
+					        <div class="joinInputDiv">
+					          <input type="text" name="userPhoneNumber" placeholder="핸드폰번호" value="${user.userPhoneNumber}"/>
+					          <span class="errorMsg"></span>
 					        </div>
 					        <div class="joinInputDiv">
 					          <input type="text" name="userEmail" placeholder="이메일" value="${user.userEmail}"/>
-					          <form:errors path="userEmail" cssClass="errorMsg"/>
+					          <span class="errorMsg"></span>
 					        </div>
 					        <div class="findAddress">
 					          <div>
-					            <input type="text" id="sample6_postcode" name="userZipCode" placeholder="우편번호" value="${user.userZipCode}"/>
+					            <input type="text" id="sample6_postcode" name="userZipCode" placeholder="우편번호 (선택 입력 항목)" value="${user.userZipCode}"/>
 					            <input type="button" onclick="sample6_execDaumPostcode()" value="검색" />
 					          </div>
 					          <form:errors path="userZipCode" cssClass="errorMsg"/>
 					        </div>
 					        <div class="joinInputDiv">
-					          <input type="text" id="sample6_address" name="userAddress" placeholder="주소" value="${user.userAddress}"/>
+					          <input type="text" id="sample6_address" name="userAddress" placeholder="주소 (선택 입력 항목)" value="${user.userAddress}"/>
 					          <form:errors path="userAddress" cssClass="errorMsg"/>
 					        </div>
 					        <div class="joinInputDiv">
@@ -54,7 +58,7 @@
 					            type="text"
 					            id="sample6_detailAddress"
 					            name="userDetailAddress"
-					            placeholder="상세주소"
+					            placeholder="상세주소 (선택 입력 항목)"
 					            value="${user.userDetailAddress}"
 					          />
 					        </div>

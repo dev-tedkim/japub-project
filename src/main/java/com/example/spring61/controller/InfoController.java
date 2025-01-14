@@ -17,4 +17,17 @@ public class InfoController {
 	public void map() {
 		
 	}
+	
+	@GetMapping("/manuscript")
+	public void manuscript() {
+	}
+	
+	@GetMapping("/store-info")
+	public void store() {
+		
+	}
+	
+	@GetMapping("/exchange")
+	public void exchange() {
+	}
 }
