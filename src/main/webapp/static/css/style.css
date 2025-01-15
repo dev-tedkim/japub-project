@@ -199,6 +199,10 @@ footer .footer-left>ul>li:nth-child(1) {
 footer>div.footer-left ul>li:not(:last-child):after {
 	content: none;
 }
+
+footer nav.footer-nav>ul>li>a {
+	white-space: nowrap;
+}
 /* footer------------------------ */
 div.joinBox {
 	width: 400px;
@@ -386,6 +390,10 @@ form[name='loginForm']>div {
 /* mypage password check -----------------------*/
 div.joinInputDiv>input.cancelChangePwBtn, div.joinInputDiv>input.changePwOkbtn
 	{
+	display: none;
+}
+
+input[class=userPasswordCheck] { /* mypage passwordCheck에만 class적용 */
 	display: none;
 }
 
@@ -792,32 +800,36 @@ div.commentInput textarea {
 	display: none;
 }
 /* comment ----------------------------------*/
-section.first-section {
+section.slide-section>.slide-container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 350px;
 }
 
-.second-section {
+.swiper-slide>img {
+	width: 100%;
+	width: 100%;
+	height: auto;
+}
+
+.slide-section .swiper {
+	width: 800px;
+	height: 140px;
+}
+/* 슬라이드 section쪽*/
+.layout-section>.layout-container {
 	margin: auto;
 	display: flex;
 	width: 80%;
 	justify-content: space-between;
 }
 
-.second-section>div.layout-box {
+.layout-container>div.layout-box {
 	width: 31%;
 	padding: 20px;
-} /* 레이아웃 */
-.swiper-slide>img {
-	width: 100%;
 }
-
-.swiper {
-	width: 800px;
-	height: 140px;
-} /* 슬라이드 */
+/* layout-section 레이아웃 */
 .notice-header {
 	display: flex;
 	justify-content: space-between;
@@ -1022,3 +1034,83 @@ iframe {
 .terms-container>h1 {
 	margin-bottom: 40px;
 } /* 회원가입 동의 */
+.book-section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-bottom:55px;
+}
+
+.book-container {
+	width: 65%;
+}
+
+.book-title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 20px;
+}
+
+.book-title-right>a {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.book-container .swiper {
+	width: 100%;
+}
+
+.book-container .swiper-wrapper {
+	display: flex;
+	justify-content: space-between;
+}
+
+.book-swiper>.book-wrapper>.swiper-slide {
+	width: 24% !important;
+	text-align: center;
+	font-size: 18px;
+	background: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #eaeaea;
+	overflow: hidden !important;;
+}
+
+.book-container img {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-position: center;
+}
+
+.book-container .swiper-button-prev {
+	transform: rotate(180deg);
+}
+
+.book-container .swiper-button-next.type_white, .book-container .swiper-button-prev.type_white
+	{
+	font-size: 14px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	background-size: 44px 44px;
+	background-image:
+		url('https://contents.kyobobook.co.kr/resources/fo/images/common/ink/btn_swiper_arr@2x.png');
+	opacity: 0.4;
+	width: 44px;
+	height: 44px;
+	margin-top: -22px;
+	background-position: center;
+	background-repeat: no-repeat;
+	transition: opacity 0.23s;
+	border-radius: 100%;
+	z-index: 2;
+	box-sizing: border-box;
+}
+
+.book-container .swiper-button-prev.type_white:after, .book-container .swiper-button-next.type_white:after
+	{
+	content: '';
+}
+/* 신간도서 */

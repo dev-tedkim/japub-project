@@ -66,10 +66,10 @@ let joinValidate = (function() { /*id check ajax*/
 	return { checkId: checkId }
 })();
 
-$("form[name=joinForm]  input[name=userId]").on("blur", function() { /*id blur*/
+$("form[name=joinForm]  input[name=userId]").on("blur", function() {/*id blur*/
 	const $element = $(this).next();
 	let id = $(this).val().trim();
-	if (!id) { return; }
+	if (!id || $(this).prop("readonly")) { return; }
 	let isSuccess = validateId(id);
 	if (!isSuccess) {
 		let msg = '5~20자의 영문 소문자, 숫자와 _ - 만 사용 가능합니다.';
@@ -84,9 +84,10 @@ $("form[name=joinForm]  input[name=userId]").on("blur", function() { /*id blur*/
 	});
 });
 
-$("input[name=userPassword]").on("blur", function() { /*password blur*/
+
+$("input[name=userPassword]").on("blur", function() {/*password blur*/
 	let password = $(this).val().trim();
-	if (!password) { return; }
+	if (!password || $(this).prop("readonly")) { return; }
 	let isSuccess = validatePassword(password);
 	const $ele = $(this).next("span");
 	let msg = isSuccess ? '' : '8~16자의 영문 대/소문자, 숫자를 사용해 주세요.';
@@ -95,11 +96,11 @@ $("input[name=userPassword]").on("blur", function() { /*password blur*/
 	$("input[name=userPasswordCheck]").trigger("blur");
 });
 
-$("input[name=userPasswordCheck]").on("blur", function() { /*passwordCheck blur*/
+$("input[name=userPasswordCheck]").on("blur", function() {/*passwordCheck blur*/
 	const $element = $(this).next("span");
 	let passwordCheck = $(this).val().trim();
 	let password = $("input[name=userPassword]").val().trim();
-	if (!passwordCheck || !password) { return; }
+	if (!passwordCheck || !password || $(this).prop("readonly")) { return; }
 	let isSuccess = password == passwordCheck;
 	let msg = isSuccess ? '' : '비밀번호가 일치하지 않습니다.';
 	changeStyle($element, isSuccess, msg);
@@ -109,10 +110,10 @@ $("input[name=userPasswordCheck]").on("blur", function() { /*passwordCheck blur*
 
 
 
-$("input[name=userEmail]").on("blur", function() { /*email blur*/
+$("input[name=userEmail]").on("blur", function() {/*email blur*/
 	const $ele = $(this).next("span");
 	let email = $(this).val().trim();
-	if (!email) { return; }
+	if (!email || $(this).prop("readonly")) { return; }
 	let isSuccess = validateEmail(email);
 	let msg = isSuccess ? '' : '이메일 주소가 정확한지 확인해 주세요.';
 	changeStyle($ele, isSuccess, msg);
@@ -120,10 +121,11 @@ $("input[name=userEmail]").on("blur", function() { /*email blur*/
 });
 
 
-$("input[name=userPhoneNumber]").on("blur", function() { /*phone blur*/
+
+$("input[name=userPhoneNumber]").on("blur", function() {/*phone blur*/
 	const $ele = $(this).next("span");
 	let phone = $(this).val().trim();
-	if (!phone) { return; }
+	if (!phone || $(this).prop("readonly")) { return; }
 	let isSuccess = validatePhone(phone);
 	let msg = isSuccess ? '' : '핸드폰번호가 정확한지 확인해 주세요.';
 	changeStyle($ele, isSuccess, msg);
@@ -143,6 +145,8 @@ $(".joinInputDiv > input[class=submit]").on("click", function(e) { /*submit*/
 	}
 	$(this).closest("form").submit();
 });
+
+
 
 
 function changeStyle($element, isSuccess, msg) { /*$element = 변경할ele, isSuccess true면 green, false면 red, msg가 true면 show, false면 hide*/
@@ -194,7 +198,7 @@ function validateEmpty() { /*input val empty check*/
 		return false;
 	}
 	if (!$("input[name=userPasswordCheck]").val().trim()) {
-		alert("비밀번호를 다시 입력해주세요");
+		alert("비밀번호를 한번더 입력해주세요");
 		return false;
 	}
 	if (!$("input[name=userPhoneNumber]").val().trim()) {

@@ -54,12 +54,12 @@
           <li>통신판매업신고번호 : 제 2020-서울중구-1256호</li>
         </ul>
       </div>
-      <nav>
+      <nav class="footer-nav">
         <ul>
-          <li><a href="#">채용안내</a></li>
+          <li><a href="#" class="footer-job">채용안내</a></li>
           <li><a href="#">이용약관</a></li>
           <li><a href="#">운영정책</a></li>
-          <li><a href="#">제휴문의</a></li>
+          <li><a href="#" class="footer-partnership">제휴문의</a></li>
         </ul>
       </nav>
     </footer>

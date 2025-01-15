@@ -29,9 +29,11 @@
 					        <div class="joinInputDiv">
 					          <input type="password" name="userPassword" placeholder="비밀번호" value="${user.userPassword}" readonly="readonly" autoComplete="off" />
 							  <form:errors path="userPassword" cssClass="errorMsg"/>
+							  <span class="errorMsg"></span>
 					        </div>
 					         <div class="joinInputDiv">
-					          <input type="password" name="userPasswordCheck" placeholder="비밀번호 재입력" autoComplete="off" />
+					          <input type="password" name="userPasswordCheck" class="userPasswordCheck" placeholder="비밀번호 재입력" autoComplete="off" />
+					          <span class="errorMsg"></span>
 					        </div>
 					        <div class="joinInputDiv">
 					          <input type="text" name="userPhoneNumber" placeholder="핸드폰" value="${user.userPhoneNumber}" readonly="readonly"/>
@@ -81,13 +83,26 @@
 	let contextPath = '${pageContext.request.contextPath}';
 	let sessionUserNum = '${sessionScope.userNum}';
 	const $mypageForm = $("form[class=mypageForm]");
-	const $input = $mypageForm.find("input[name=userPassword]");
+	const $pwInput = $mypageForm.find("input[name=userPassword]");
+	const $pwCheckInput = $mypageForm.find("input[class=userPasswordCheck]");
 	let userPassword = "";
 </script>
 <script src="<c:url value='/static/js/script.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="<c:url value='/static/js/join.js' />"></script>
-
+<script>
+console.log($("input[name=userId]").prop("readonly"));
+$("input.changePwOkbtn").on("click", function(e) { /*mypage 수정완료 클릭*/
+	e.preventDefault();
+	if (!validateEmpty()) { return; }
+	const { userPassword, userPasswordCheck } = validationChecks;
+	if ([userPassword, userPasswordCheck].includes(false)) {
+		alert("모든 항목을 정확히 입력해주세요.");
+		return;
+	}
+	$(this).closest("form[name=joinForm]").submit();
+});
+</script>
 	
 	
 </html>

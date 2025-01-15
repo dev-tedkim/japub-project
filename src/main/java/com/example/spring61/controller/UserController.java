@@ -48,6 +48,7 @@ public class UserController {
 
 	@PostMapping("/join")
 	public String join(@Valid UserDto userDto, BindingResult result, RedirectAttributes attributes) {
+		userDto.setUserPhoneNumber(userDto.getUserPhoneNumber().replaceAll("-", ""));
 		if (result.hasErrors()) {
 			return "user/join";
 		}

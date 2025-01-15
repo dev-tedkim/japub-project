@@ -95,7 +95,7 @@ $("a.cancelCommentBtn").on("click", function(e) { /*수정,답글 취소*/
 	e.preventDefault();
 	$updateLi.find("textarea").val("");
 	$updateLi.hide().prev().show();
-	$("div.updateDiv").appendTo($updateLi);
+	$updateLi.appendTo(".updateDiv");
 	flag = false;
 });
 
@@ -134,7 +134,6 @@ $(".commentUl").on("click", ".replyBtn", function(e) { /*답글준비*/
 
 
 $(".replySubmitBtn").on("click", function(e) { /*답글등록*/
-	alert("답글등록");
 	e.preventDefault();
 	const $textarea = $updateLi.find("textarea");
 	const $replySubmitBtn = $(this);

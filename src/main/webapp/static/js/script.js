@@ -47,20 +47,23 @@ $("form[name=passwordCheckForm]").on("submit", function(e) { /*mypage passworChe
 
 
 $(".changePwBtn").on("click", function() { /* 마이페이지 비밀번호변경 */
+	userPassword = $pwInput.val().trim();
 	$(this).hide();
 	$(this).next().show();
 	$mypageForm.find(".cancelChangePwBtn").show();
-	$input.prop("readonly", false);
-	$input.focus();
-	userPassword = $input.val().trim();
+	$pwCheckInput.show();
+	$pwInput.prop("readonly", false);
+	$pwInput.val("");
+	$pwInput.focus();
 });
 
 $(".cancelChangePwBtn").on("click", function() {  /* 마이페이지 비밀번호변경 취소 */
 	$(this).hide();
 	$mypageForm.find(".changePwBtn").show().next().hide();
-	$input.val(userPassword);
+	$pwInput.val(userPassword);
 	userPassword = "";
-	$input.prop("readonly", true);
+	$pwInput.prop("readonly", true);
+	$pwCheckInput.hide();
 });
 
 
@@ -136,3 +139,14 @@ $("header > h1").on("click", function(e) { /*로고클릭시 메인화면으로*
 	e.preventDefault();
 	location.href = contextPath + "/main";
 })
+
+$(".footer-job").on("click", function(e) { /*footer 채용안내*/
+	e.preventDefault();
+	alert("채용 기간이 아닙니다.");
+});
+
+
+$(".footer-partnership").on("click", function(e) {
+	e.preventDefault();
+	alert("서비스 준비중 입니다.");
+});
