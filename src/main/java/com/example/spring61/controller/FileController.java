@@ -116,7 +116,7 @@ public class FileController {
 	public ResponseEntity<List<FileDto>> getFiles(@PathVariable Long boardNum) {
 		List<FileDto> files = fileService.findByBoardNum(boardNum);
 		
-		if (files == null && files.isEmpty()) {
+		if (files == null || files.isEmpty()) {
 			return new ResponseEntity<List<FileDto>>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);

@@ -35,7 +35,7 @@ public class CommentController {
 	@GetMapping(value = "/{boardNum}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CommentDto>> getComments(@PathVariable Long boardNum, Criteria criteria) {
 		List<CommentDto> comments = commentService.findByBoardNumAndCriteria(boardNum, criteria);
-		if (comments == null) {
+		if (comments == null || comments.isEmpty()) {
 			return new ResponseEntity<List<CommentDto>>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<List<CommentDto>>(comments, HttpStatus.OK);

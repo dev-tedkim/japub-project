@@ -1,5 +1,7 @@
 package com.example.spring61.domain.dao.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -42,5 +44,15 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public UserDto findByUserId(String userId) throws Exception {
 		return userMapper.findByUserId(userId);
+	}
+
+	@Override
+	public UserDto findByUserEmail(String userEmail) throws Exception {
+		return userMapper.findByUserEmail(userEmail);
+	}
+
+	@Override
+	public int updateTempPassword(UserDto userDto) throws Exception {
+		return userMapper.updateTempPassword(userDto);
 	}
 }

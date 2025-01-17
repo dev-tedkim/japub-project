@@ -89,14 +89,14 @@
         <!-- Swiper -->
         <div id="book-swiper" class="swiper">
           <div class="swiper-wrapper book-wrapper">
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/1.jpg' />" width="300px" height="auto" /></div>
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/2.jpg' />"  /></div>
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/3.jpg' />"  /></div>
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/4.jpg' />" /></div>
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/5.jpg' />" /></div>
-              <div class="swiper-slide"><img src="<c:url value='/static/image/new/2.jpg' />" /></div>
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/3.jpg' />" /></div>
-            <div class="swiper-slide"><img src="<c:url value='/static/image/new/4.jpg' />" /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/1.jpg' />" width="300px" height="auto" /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/2.jpg' />"  /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/3.jpg' />"  /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/4.jpg' />" /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/5.jpg' />" /></div>
+              <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/1.jpg' />" /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/2.jpg' />" /></div>
+            <div class="swiper-slide"><img src="<c:url value='/static/image/recomend/3.jpg' />" /></div>
           </div>
 
           <button

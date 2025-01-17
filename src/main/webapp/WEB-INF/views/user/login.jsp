@@ -25,7 +25,7 @@
 				        <input type="submit" value="로그인" />
 				        <div>
 				          <label> <input type="checkbox" name="rememberId" ${not empty cookie.id.value ? 'checked' : ''}/>&nbsp아이디 기억 </label>
-				          &nbsp;|&nbsp;<a href="">비밀번호 찾기</a>&nbsp;|&nbsp;<a href="<c:url value='/user/term' />">회원가입</a>
+				          &nbsp;|&nbsp;<a href="<c:url value='/user/find' />">아이디/비밀번호 찾기</a>&nbsp;|&nbsp;<a href="<c:url value='/user/term' />">회원가입</a>
 				       	</div>
 			      </form>
    			</div>

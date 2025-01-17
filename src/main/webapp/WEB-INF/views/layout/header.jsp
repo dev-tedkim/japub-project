@@ -15,6 +15,7 @@
 					<c:if test="${not empty sessionScope.userNum}">
 						<li><a href="<c:url value='/user/checkPassword' />">마이페이지</a></li>
 					</c:if>
+					<li><a href="<c:url value='/user/find' />">계정찾기</a></li>
 				</ul></li>
 
 			<li><a href="<c:url value='/main' />">메인페이지</a>

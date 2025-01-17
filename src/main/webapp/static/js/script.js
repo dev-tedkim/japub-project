@@ -58,6 +58,8 @@ $(".changePwBtn").on("click", function() { /* 마이페이지 비밀번호변경
 });
 
 $(".cancelChangePwBtn").on("click", function() {  /* 마이페이지 비밀번호변경 취소 */
+	$pwInput.val("").next("span").text("");
+	$pwCheckInput.val("").next("span").text("");
 	$(this).hide();
 	$mypageForm.find(".changePwBtn").show().next().hide();
 	$pwInput.val(userPassword);
