@@ -1,13 +1,10 @@
 package com.example.spring61.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.spring61.domain.dto.UserDto;
 import com.example.spring61.domain.service.user.MailServiceImpl;
-import com.example.spring61.domain.service.user.PasswordServiceImpl;
 import com.example.spring61.domain.service.user.UserService;
 import com.example.spring61.domain.validator.UserValidator;
 
@@ -37,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final UserService userService;
 	private final MailServiceImpl mailService;
-	private final PasswordServiceImpl passwordService;
 	private final String ERROR_MSG = "요청처리중 문제가 발생했습니다. 다시 시도해 주세요";
 
 	@InitBinder
@@ -81,7 +76,7 @@ public class UserController {
 	@PostMapping("/login")
 	public String login(String userId, String userPassword, boolean rememberId, HttpSession session,
 			HttpServletResponse resp, RedirectAttributes attributes) {
-		UserDto userDto = userService.findByUserIdAndUserPassword(userId, userPassword);
+		UserDto userDto = userService.login(userId, userPassword);
 		if (userDto == null) {
 			attributes.addFlashAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
 			return "redirect:/user/login";
@@ -160,14 +155,24 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@GetMapping("/checkId")
-	public ResponseEntity<Boolean> checkId(String userId) {
-		if (userService.findByUserId(userId) == null) {
+	@PostMapping(value = "/checkId", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> checkId(@RequestBody UserDto userDto) {
+		if (userService.findByUserId(userDto.getUserId()) == null) {
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 	}
 
+	@ResponseBody
+	@PostMapping(value = "/checkEmail", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> checkEmail(@RequestBody UserDto userDto){
+		String userEmail = userDto.getUserEmail();
+		if(userService.findByUserEmail(userEmail) == null) {
+			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(false,HttpStatus.OK);
+	}
+	
 	private void setLoginCookie(String userId, boolean rememberId, HttpServletResponse resp) {
 		Cookie cookie = new Cookie("id", rememberId ? userId : "");
 		cookie.setPath("/");

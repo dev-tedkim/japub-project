@@ -26,18 +26,16 @@
 					          <input type="text" name="userId" placeholder="아이디" autofocus value="${user.userId}" readonly="readonly"/>
 					          <form:errors path="userId" cssClass="errorMsg"/>
 					        </div>
-					        <div class="joinInputDiv">
-					          <input type="password" name="userPassword" placeholder="비밀번호" value="${user.userPassword}" readonly="readonly" autoComplete="off" />
-							  <form:errors path="userPassword" cssClass="errorMsg"/>
-							  <span class="errorMsg"></span>
-					        </div>
-					         <div class="joinInputDiv">
-					          <input type="password" name="userPasswordCheck" class="userPasswordCheck" placeholder="비밀번호 재입력" autoComplete="off" />
+					          <div class="joinInputDiv">
+					          <input type="password" name="userPassword" placeholder="비밀번호" value="${user.userPassword}" readonly="readonly"/>
 					          <span class="errorMsg"></span>
 					        </div>
 					        <div class="joinInputDiv">
-					          <input type="text" name="userPhoneNumber" placeholder="핸드폰" value="${user.userPhoneNumber}" readonly="readonly"/>
-					          <form:errors path="userPhoneNumber" cssClass="errorMsg"/>
+					          <input type="hidden" name="userPasswordCheck" placeholder="비밀번호 재입력" value=""/>
+					          <span class="errorMsg"></span>
+					        </div>
+					        <div class="joinInputDiv">
+					          <input type="text" name="userPhoneNumber" placeholder="핸드폰번호" value="${user.userPhoneNumber}" readonly="readonly"/>
 					        </div>
 					        <div class="joinInputDiv">
 					          <input type="text" name="userEmail" placeholder="이메일" value="${user.userEmail}" readonly="readonly"/>
@@ -83,26 +81,15 @@
 	let contextPath = '${pageContext.request.contextPath}';
 	let sessionUserNum = '${sessionScope.userNum}';
 	const $mypageForm = $("form[class=mypageForm]");
-	const $pwInput = $mypageForm.find("input[name=userPassword]");
-	const $pwCheckInput = $mypageForm.find("input[class=userPasswordCheck]");
+	const $passwordInput = $mypageForm.find("input[name=userPassword]");
+	const $passwordCheckInput = $mypageForm.find("input[name=userPasswordCheck]");
 	let userPassword = "";
 </script>
 <script src="<c:url value='/static/js/script.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="<c:url value='/static/js/join.js' />"></script>
-<script>
-console.log($("input[name=userId]").prop("readonly"));
-$("input.changePwOkbtn").on("click", function(e) { /*mypage 수정완료 클릭*/
-	e.preventDefault();
-	if (!validateEmpty()) { return; }
-	const { userPassword, userPasswordCheck } = validationChecks;
-	if ([userPassword, userPasswordCheck].includes(false)) {
-		alert("모든 항목을 정확히 입력해주세요.");
-		return;
-	}
-	$(this).closest("form[name=joinForm]").submit();
-});
-</script>
+<script src="<c:url value='/static/js/mypage.js' />"></script>
+
 	
 	
 </html>

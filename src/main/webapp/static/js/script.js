@@ -39,34 +39,6 @@ $("form[name=loginForm]").on("submit", function(e) { /*login check*/
 });
 
 
-$("form[name=passwordCheckForm]").on("submit", function(e) { /*mypage passworCheck*/
-	e.preventDefault();
-	if (!$(this).find("input[name=userPassword]").val().trim()) { alert("비밀번호를 입력하세요"); return; }
-	this.submit();
-})
-
-
-$(".changePwBtn").on("click", function() { /* 마이페이지 비밀번호변경 */
-	userPassword = $pwInput.val().trim();
-	$(this).hide();
-	$(this).next().show();
-	$mypageForm.find(".cancelChangePwBtn").show();
-	$pwCheckInput.show();
-	$pwInput.prop("readonly", false);
-	$pwInput.val("");
-	$pwInput.focus();
-});
-
-$(".cancelChangePwBtn").on("click", function() {  /* 마이페이지 비밀번호변경 취소 */
-	$pwInput.val("").next("span").text("");
-	$pwCheckInput.val("").next("span").text("");
-	$(this).hide();
-	$mypageForm.find(".changePwBtn").show().next().hide();
-	$pwInput.val(userPassword);
-	userPassword = "";
-	$pwInput.prop("readonly", true);
-	$pwCheckInput.hide();
-});
 
 
 $("a.page").on("click", function(e) { /*board-list page click*/
@@ -134,6 +106,13 @@ $("a.updateBoardBtn").on("click", function(e) { /*게시글 수정*/
 	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
 	createFileInputs($form);
 });
+
+
+$("form[name=passwordCheckForm]").on("submit", function(e) { /*passworCheck password submit*/
+	e.preventDefault();
+	if (!$(this).find("input[name=userPassword]").val().trim()) { alert("비밀번호를 입력하세요"); return; }
+	this.submit();
+})
 
 
 

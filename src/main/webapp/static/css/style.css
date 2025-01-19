@@ -255,6 +255,7 @@ div.joinInputDiv>input[type='text'], div.joinInputDiv>input[type='password']
 	font-weight: bold;
 	margin-bottom: -7px;
 	margin-left: 3px;
+	color:red;
 }
 
 .findAddress {
