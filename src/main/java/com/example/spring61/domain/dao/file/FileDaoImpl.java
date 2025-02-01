@@ -2,7 +2,6 @@ package com.example.spring61.domain.dao.file;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.spring61.domain.dto.FileDto;
@@ -10,16 +9,10 @@ import com.example.spring61.domain.mapper.FileMapper;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Repository
-public class FileDaoImpl implements FileDao{
-	@Autowired
+@RequiredArgsConstructor
+public class FileDaoImpl implements FileDao {
 	private final FileMapper fileMapper;
-
-	@Override
-	public List<FileDto> findByBoardNum(Long boardNum) throws Exception {
-		return fileMapper.findByBoardNum(boardNum);
-	}
 
 	@Override
 	public int insert(FileDto fileDto) throws Exception {
@@ -27,8 +20,13 @@ public class FileDaoImpl implements FileDao{
 	}
 
 	@Override
-	public int deleteByBoardNum(Long boardNum) throws Exception {
-		return fileMapper.deleteByBoardNum(boardNum);
+	public List<FileDto> findByBoardNum(Long boardNum) throws Exception {
+		return fileMapper.findByBoardNum(boardNum);
+	}
+
+	@Override
+	public int delete(Long boardNum) throws Exception {
+		return fileMapper.delete(boardNum);
 	}
 
 }

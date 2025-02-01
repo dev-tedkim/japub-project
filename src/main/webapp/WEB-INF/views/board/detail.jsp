@@ -56,24 +56,21 @@
 			      		<ul class="thumbnailUl"></ul>
 			      </div>
     		</div>
-    		
-    	<div class="commentContainer">
-     	 <ul class="commentUl"></ul>
-
-      <div class="showCommentBtn">
-        <a href="showMoreCommentBtn">댓글 더보기</a>
-      </div>
-
-      <div class="commentInput">
-        <div>
-          <span class="writer">${empty userId ? '' : userId}</span>
-        </div>
-        <textarea rows="5" cols="30" placeholder="댓글을 입력해보세요."></textarea>
-        <div>
-          <a href="#" class="writeCommentBtn">등록</a>
-        </div>
-      </div>
-    </div>
+    		 <div class="commentContainer">
+	     	 <ul class="commentUl"></ul>
+			<div class="showCommentBtn">
+	        	<a href="showMoreCommentBtn">댓글 더보기</a>
+	        </div>
+	          <div class="commentInput">
+			        <div>
+			          <span class="writer">${user.userId}</span>
+			        </div>
+			        <textarea rows="5" cols="30" placeholder="댓글을 입력해보세요."></textarea>
+			        <div>
+			          <a href="#" class="writeCommentBtn">등록</a>
+			        </div>
+		      </div>
+           </div>
 	    </main>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 	<div class="updateDiv">
@@ -83,7 +80,7 @@
           </span>
           <section>
             <div>
-              <span class="writer">${userId}</span>
+              <span class="writer">${user.userId}</span>
             </div>
             <textarea cols="30" rows="5" placeholder="댓글을 입력해보세요."></textarea>
             <div class="updateLiBtnDiv">
@@ -98,6 +95,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
 	const $updateLi = $("li.updateLi");
+	const $commentUl = $("ul.commentUl");
 	let msg = '${msg}';
 	if(msg){alert(msg);}
 	let contextPath = '${pageContext.request.contextPath}';
@@ -109,6 +107,8 @@
 <script src="<c:url value='/static/js/script.js' />"></script>
 <script src="<c:url value='/static/js/comment.js' />"></script>
 <script src="<c:url value='/static/js/file.js' />"></script>
-<script>commentService.showComments();</script>
-<script>fileService.getFiles(true);</script>
+<script>commentService.showComments(createCommentHtml);</script>
+<script>
+	fileService.getFiles(boardNum,(files) => {appendThumbnails(files,true);});
+</script>
 </html>

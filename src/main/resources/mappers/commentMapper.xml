@@ -38,4 +38,3 @@
 		<![CDATA[ WHERE ROWNUM <= #{criteria.endRow} ]]>
 	</select>
 </mapper>
-

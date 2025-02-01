@@ -6,7 +6,7 @@
 	<insert id="insert">
 		INSERT INTO TBL_FILE
 		(UUID, UPLOAD_PATH, FILE_TYPE, FILE_NAME, BOARD_NUM)
-		VALUES(#{uuid}, #{uploadPath}, #{fileType}, #{fileName}, #{boardNum})
+		VALUES(#{uuid}, #{uploadPath}, #{fileType}, #{fileName}, #{boardNum})	
 	</insert>
 	
 	<select id="findByBoardNum" resultType="fileDto">
@@ -14,10 +14,8 @@
 		FROM TBL_FILE WHERE BOARD_NUM = #{boardNum}
 	</select>
 	
-	<delete id="deleteByBoardNum">
+	<delete id="delete">
 		DELETE FROM TBL_FILE WHERE BOARD_NUM = #{boardNum}
 	</delete>
 </mapper>
-
-
 

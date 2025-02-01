@@ -36,48 +36,32 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean insert(BoardDto boardDto) {
+	public void insert(BoardDto boardDto) {
 		try {
 			if (boardDao.insert(boardDto) != SUCCESS_CODE) {
 				throw new RuntimeException("boardService insert error");
 			}
-			List<FileDto> files = boardDto.getFiles();
-			if (files != null && !files.isEmpty()) {
-				for (FileDto fileDto : files) {
-					fileDto.setBoardNum(boardDto.getBoardNum());
-					if (!fileService.insert(fileDto)) {
-						throw new RuntimeException("boardService file insert error");
-					}
-				}
-			}
+			fileService.insertFiles(boardDto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		return true;
 	}
+
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean update(BoardDto boardDto) {
+	public void update(BoardDto boardDto) {
+		fileService.delete(boardDto.getBoardNum());
 		try {
-			List<FileDto> files = boardDto.getFiles();
-			if (files != null && !files.isEmpty()) {
-				fileService.deleteByBoardNum(boardDto.getBoardNum());
-				for (FileDto fileDto : files) {
-					fileDto.setBoardNum(boardDto.getBoardNum());
-					if (!fileService.insert(fileDto)) {
-						throw new RuntimeException("boardService file update error");
-					}
-				}
-			}
 			if (boardDao.update(boardDto) != SUCCESS_CODE) {
 				throw new RuntimeException("boardService update error");
 			}
+			fileService.insertFiles(boardDto);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		return true;
 	}
 
 	@Override

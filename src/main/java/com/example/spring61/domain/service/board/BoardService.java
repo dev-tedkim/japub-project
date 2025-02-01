@@ -10,9 +10,9 @@ import com.example.spring61.domain.dto.Criteria;
 public interface BoardService {
 	public abstract List<BoardDto> findAllByCriteria(Criteria criteria);
 
-	public abstract boolean insert(BoardDto boardDto);
+	public abstract void insert(BoardDto boardDto);
 
-	public abstract boolean update(BoardDto boardDto);
+	public abstract void update(BoardDto boardDto);
 
 	public abstract boolean delete(@Param("boardNum") Long boardNum, @Param("userNum") Long userNum);
 
