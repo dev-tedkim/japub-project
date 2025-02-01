@@ -255,6 +255,7 @@ div.joinInputDiv>input[type='text'], div.joinInputDiv>input[type='password']
 	font-weight: bold;
 	margin-bottom: -7px;
 	margin-left: 3px;
+	color: red;
 }
 
 .findAddress {
@@ -718,10 +719,6 @@ div.commentContainer>ul>li>section>div:nth-child(3) {
 	padding: 5px 0;
 }
 
-div.commentContainer>ul>li>section>div:nth-child(3)>a {
-	margin-left: 5px;
-}
-
 div.commentContainer>ul>li>section>div:nth-child(3)>a:hover {
 	font-weight: bold;
 }
@@ -740,19 +737,23 @@ li.updateLi section>div.updateLiBtnDiv {
 	text-align: right;
 }
 
-div.commentContainer>ul>li.updateLi section>div.updateLiBtnDiv>a {
+.updateLiBtnDiv>a {
 	font-size: 16px;
 	display: inline-block;
 	margin: 0;
 }
 
+.updateLiBtnDiv>a.replySubmitBtn {
+	display: none;
+}
+
+.comment-footer>a {
+	margin-left: 5px;
+}
+
 div.commentContainer>ul>li.updateLi section>div.updateLiBtnDiv>a:nth-child(1)
 	{
 	margin-right: 10px;
-}
-
-li.updateLi  updateLiBtnDiv>a.replySubmitBtn {
-	display: none;
 }
 
 div.showCommentBtn {
@@ -798,6 +799,11 @@ div.commentInput textarea {
 
 .updateDiv>li.updateLi {
 	display: none;
+}
+
+.replyComment {
+	color: blue;
+	font-weight: bold;
 }
 /* comment ----------------------------------*/
 section.slide-section>.slide-container {
@@ -1141,11 +1147,10 @@ div.find-contents fieldset {
 
 .find-footer {
 	padding: 10px;
-	font-size: 0;
 	text-align: center;
 }
 
-a.find-btn {
+.find-footer a.find-btn {
 	display: inline-block;
 	border: 1px solid #bbb;
 	border-radius: 3px;

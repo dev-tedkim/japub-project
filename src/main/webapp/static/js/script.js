@@ -39,34 +39,6 @@ $("form[name=loginForm]").on("submit", function(e) { /*login check*/
 });
 
 
-$("form[name=passwordCheckForm]").on("submit", function(e) { /*mypage passworCheck*/
-	e.preventDefault();
-	if (!$(this).find("input[name=userPassword]").val().trim()) { alert("비밀번호를 입력하세요"); return; }
-	this.submit();
-})
-
-
-$(".changePwBtn").on("click", function() { /* 마이페이지 비밀번호변경 */
-	userPassword = $pwInput.val().trim();
-	$(this).hide();
-	$(this).next().show();
-	$mypageForm.find(".cancelChangePwBtn").show();
-	$pwCheckInput.show();
-	$pwInput.prop("readonly", false);
-	$pwInput.val("");
-	$pwInput.focus();
-});
-
-$(".cancelChangePwBtn").on("click", function() {  /* 마이페이지 비밀번호변경 취소 */
-	$pwInput.val("").next("span").text("");
-	$pwCheckInput.val("").next("span").text("");
-	$(this).hide();
-	$mypageForm.find(".changePwBtn").show().next().hide();
-	$pwInput.val(userPassword);
-	userPassword = "";
-	$pwInput.prop("readonly", true);
-	$pwCheckInput.hide();
-});
 
 
 $("a.page").on("click", function(e) { /*board-list page click*/
@@ -91,49 +63,14 @@ $("form[name=searchForm").on("submit", function(e) { /*게시판 검색*/
 });
 
 
-$(".deleteBoardBtn").on("click", function(e) { /*게시글 삭제*/
+
+
+
+$("form[name=passwordCheckForm]").on("submit", function(e) { /*passworCheck password submit*/
 	e.preventDefault();
-	if (!confirm("정말로 삭제 하시겠습니까?")) { return; }
-	$(".thumbnailUl > li").each((i, li) => {
-		let file = { uuid: li.dataset.uuid, uploadPath: li.dataset.uploadpath, fileName: li.dataset.filename, fileType: li.dataset.filetype };
-		console.log(file);
-		fileService.remove(file);
-	});
-	location.href = $(this).attr("href");
-});
-
-
-function createFileInputs($form) {
-	let html = "";
-	$(".thumbnailUl > li").each((i, li) => {
-		html += `<input type="hidden" name="files[${i}].uuid" value="${li.dataset.uuid}" />`;
-		html += `<input type="hidden" name="files[${i}].uploadPath" value="${li.dataset.uploadpath}" />`;
-		html += `<input type="hidden" name="files[${i}].fileName" value="${li.dataset.filename}" />`;
-		html += `<input type="hidden" name="files[${i}].fileType" value="${li.dataset.filetype}" />`;
-	});
-	$form.append(html);
-	$form.submit();
-}
-
-$("a.writeBoardBtn").on("click", function(e) { /*게시글 등록*/
-	e.preventDefault();
-	let formName = $(this).data("formname");
-	const $form = $(`form.${formName}`);
-	if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
-	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
-	createFileInputs($form);
-});
-
-
-
-$("a.updateBoardBtn").on("click", function(e) { /*게시글 수정*/
-	e.preventDefault();
-	let formName = $(this).data("formname");
-	const $form = $(`form.${formName}`);
-	if (!$form.find("input[name=boardTitle]").val().trim()) { alert("제목을 입력하세요"); return; }
-	if (!$form.find("textarea[name=boardContent]").val().trim()) { alert("내용을 입력하세요"); return; }
-	createFileInputs($form);
-});
+	if (!$(this).find("input[name=userPassword]").val().trim()) { alert("비밀번호를 입력하세요"); return; }
+	this.submit();
+})
 
 
 

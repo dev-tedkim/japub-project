@@ -37,43 +37,24 @@ import com.example.spring61.domain.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 
-@RestController
 @RequestMapping("/files")
+@RestController
 @RequiredArgsConstructor
 public class FileController {
-	private final String DEFAULT_DIRECTORY_PATH = "C:/upload";
-	@Autowired
 	private final FileService fileService;
-
-	@PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	private final String DEFAULT_DIRECTORY = "c:/upload";
+	
+	@PostMapping(value ="/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<FileDto>> upload(MultipartFile[] multipartFiles) {
-		String datePath = getDatePath();
-		File uploadPath = new File(DEFAULT_DIRECTORY_PATH, datePath);
 		List<FileDto> files = new ArrayList<>();
-		if (!uploadPath.exists()) {
-			uploadPath.mkdirs();
-		}
 		if (multipartFiles != null) {
+			String datePath = fileService.getDatePath();
+			File uploadPath = fileService.getUploadPath(DEFAULT_DIRECTORY, datePath);
 			for (MultipartFile multipartFile : multipartFiles) {
-				FileDto fileDto = new FileDto();
-				String uuid = UUID.randomUUID().toString();
-				String originalFileName = multipartFile.getOriginalFilename();
-				String fileName = uuid + "_" + originalFileName;
 				try {
-					File file = new File(uploadPath, fileName);
-					multipartFile.transferTo(file);
-					fileDto.setUuid(uuid);
-					fileDto.setFileName(originalFileName);
-					fileDto.setUploadPath(datePath);
-					if (isFileType(file)) {
-						fileDto.setFileType(true);
-						try (InputStream in = new FileInputStream(file);
-								OutputStream out = new FileOutputStream(new File(uploadPath, "t_" + fileName));) {
-							Thumbnailator.createThumbnail(in, out, 100, 100);
-						}
-					}
+					FileDto fileDto = fileService.uploadFile(multipartFile, uploadPath, datePath);
 					files.add(fileDto);
-				} catch (IllegalStateException | IOException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					return new ResponseEntity<List<FileDto>>(HttpStatus.BAD_REQUEST);
 				}
@@ -82,73 +63,58 @@ public class FileController {
 		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
 	}
 
-	private String getDatePath() {
-		return new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-	}
-
-	private boolean isFileType(File file) throws IOException {
-		String contentType = Files.probeContentType(file.toPath());
-		if (contentType == null) {
-			return false;
-		}
-		return contentType.startsWith("image");
-	}
-
 	@GetMapping("/display")
 	public ResponseEntity<byte[]> display(String fileName) {
-		byte[] result = null;
-		HttpHeaders header = new HttpHeaders();
-		File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
+		File file = new File(DEFAULT_DIRECTORY, fileName);
+		if (!file.exists()) {
+			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+		}
+
 		try {
-			if (!file.exists()) {
-				return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
-			}
-			header.add("Content-Type", Files.probeContentType(file.toPath()));
-			result = FileCopyUtils.copyToByteArray(file);
+			String contentType = Files.probeContentType(file.toPath());
+			HttpHeaders header = new HttpHeaders();
+			header.add("Content-Type", contentType == null ? "application/actet-stream" : contentType);
+			byte[] result = FileCopyUtils.copyToByteArray(file);
+			return new ResponseEntity<byte[]>(result, header, HttpStatus.OK);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<byte[]>(result, header, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{boardNum}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<FileDto>> getFiles(@PathVariable Long boardNum) {
-		List<FileDto> files = fileService.findByBoardNum(boardNum);
-		
-		if (files == null || files.isEmpty()) {
-			return new ResponseEntity<List<FileDto>>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
+		return new ResponseEntity<List<FileDto>>(fileService.findByBoardNum(boardNum), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<Resource> download(String fileName) {
-		File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
-		Resource resource = new FileSystemResource(file);
-		if (!resource.exists()) {
-			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+		File file = new File(DEFAULT_DIRECTORY, fileName);
+		if (!file.exists()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		Resource resource = new FileSystemResource(file);
 		String resourceName = resource.getFilename();
 		resourceName = resourceName.substring(resourceName.indexOf("_") + 1);
 		HttpHeaders header = new HttpHeaders();
 		try {
 			header.add("Content-Disposition",
 					"attachment;filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
+			return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			return new ResponseEntity<Resource>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "/{boardNum}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	@DeleteMapping(value = "/{boardNum}", consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> delete(@RequestBody FileDto fileDto) {
 		String fileName = fileDto.getUploadPath() + "/t_" + fileDto.getUuid() + "_" + fileDto.getFileName();
-		File file = new File(DEFAULT_DIRECTORY_PATH, fileName);
+		File file = new File(DEFAULT_DIRECTORY, fileName);
 		if (file.exists()) {
 			file.delete();
 		}
-		file = new File(DEFAULT_DIRECTORY_PATH, fileName.replace("t_", ""));
+		file = new File(DEFAULT_DIRECTORY, fileName.replace("t_", ""));
 		if (file.exists()) {
 			file.delete();
 		}

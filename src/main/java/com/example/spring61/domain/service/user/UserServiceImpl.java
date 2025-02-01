@@ -1,9 +1,5 @@
 package com.example.spring61.domain.service.user;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +17,13 @@ public class UserServiceImpl implements UserService {
 	private final int SUCCESS_CODE = 1;
 
 	@Override
-	public UserDto findByUserIdAndUserPassword(String userId, String userPassword) {
-		try {
-			UserDto userDto = userDao.findByUserId(userId);
-			if (userDto != null && passwordService.matches(userPassword, userDto.getUserPassword())) {
-				return userDto;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("userService findByUserIdAndUserPassword error");
+	public UserDto login(String userId, String userPassword) {
+		UserDto userDto = findByUserId(userId);
+		if (userDto == null) {
+			return null;
+		}
+		if (passwordService.matches(userPassword, userDto.getUserPassword())) {
+			return userDto;
 		}
 		return null;
 	}
@@ -48,9 +42,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean update(UserDto userDto) {
 		try {
-			String password = userDto.getUserPassword();
-			if (password != null) {
-				userDto.setUserPassword(passwordService.encodePassword(password));
+			if (userDto.getUserPassword() != null) {
+				userDto.setUserPassword(passwordService.encode(userDto.getUserPassword()));
 			}
 			return userDao.update(userDto) == SUCCESS_CODE;
 		} catch (Exception e) {
@@ -63,8 +56,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean insert(UserDto userDto) {
 		try {
-			String encodedPassword = passwordService.encodePassword(userDto.getUserPassword());
-			userDto.setUserPassword(encodedPassword);
+			userDto.setUserPassword(passwordService.encode(userDto.getUserPassword()));
 			return userDao.insert(userDto) == SUCCESS_CODE;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,16 +67,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto checkPassword(Long userNum, String userPassword) {
-		try {
-			UserDto userDto = userDao.findByUserNum(userNum);
-			if (userDto != null && passwordService.matches(userPassword, userDto.getUserPassword())) {
-				return userDto;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("userService checkPassword error");
+		UserDto userDto = findByUserNum(userNum);
+		if (userDto == null) {
+			return null;
 		}
-		return null;
+		if (!passwordService.matches(userPassword, userDto.getUserPassword())) {
+			return null;
+		}
+		return userDto;
 	}
 
 	@Override
@@ -130,14 +120,4 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
-	@Override
-	public boolean updateTempPassword(UserDto userDto) {
-		try {
-			return userDao.updateTempPassword(userDto) == SUCCESS_CODE;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("userService updateTempPassword error");
-		}
-		return false;
-	}
 }

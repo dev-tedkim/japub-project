@@ -9,7 +9,7 @@ import com.example.spring61.domain.dto.FileDto;
 
 @Mapper
 public interface FileMapper {
-	public abstract List<FileDto> findByBoardNum(Long boardNum) throws Exception;
 	public abstract int insert(FileDto fileDto) throws Exception;
-	public abstract int deleteByBoardNum(@Param("boardNum") Long boardNum) throws Exception;
+	public abstract List<FileDto> findByBoardNum(Long boardNum) throws Exception;
+	public abstract int delete(Long boardNum) throws Exception;
 }

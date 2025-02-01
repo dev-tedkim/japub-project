@@ -97,16 +97,14 @@ public class BoardController {
 		boardDto.setUserNum(userNum);
 		boardDto.setBoardCategory(criteria.getCategory());
 		try {
-			if (boardService.insert(boardDto)) {
-				attributes.addAttribute("category", criteria.getCategory());
-				return "redirect:/board/list";
-			}
+			boardService.insert(boardDto);
+			attributes.addAttribute("category", criteria.getCategory());
+			return "redirect:/board/list";
 		} catch (Exception e) {
-			e.printStackTrace();
+			attributes.addFlashAttribute("msg", ERROR_MSG);
+			attributes.addFlashAttribute("board", boardDto);
+			return "redirect:/board/write" + criteria.getParams();
 		}
-		attributes.addFlashAttribute("msg", ERROR_MSG);
-		attributes.addFlashAttribute("board", boardDto);
-		return "redirect:/board/write" + criteria.getParams();
 	}
 
 	@GetMapping("/update")
@@ -125,15 +123,18 @@ public class BoardController {
 
 	@PostMapping("/update")
 	public String update(BoardDto boardDto, Criteria criteria, RedirectAttributes attributes, HttpSession session) {
+		System.out.println("post update" + criteria);
 		Long userNum = (Long) session.getAttribute("userNum");
 		boardDto.setUserNum(userNum);
 		boardDto.setBoardCategory(criteria.getCategory());
-		if (!boardService.update(boardDto)) {
+		try {
+			boardService.update(boardDto);
+			return "redirect:/board/detail" + criteria.getParams() + "&boardNum=" + boardDto.getBoardNum();
+		} catch (Exception e) {
 			attributes.addFlashAttribute("msg", ERROR_MSG);
 			attributes.addFlashAttribute("board", boardDto);
 			return "redirect:/board/update" + criteria.getParams() + "&boardNum=" + boardDto.getBoardNum();
 		}
-		return "redirect:/board/detail" + criteria.getParams() + "&boardNum=" + boardDto.getBoardNum();
 	}
 
 }

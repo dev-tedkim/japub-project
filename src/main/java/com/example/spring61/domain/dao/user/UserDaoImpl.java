@@ -12,14 +12,9 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 	@Autowired
 	private final UserMapper userMapper;
-
-	@Override
-	public UserDto findByUserIdAndUserPassword(String userId, String userPassword) throws Exception {
-		return userMapper.findByUserIdAndUserPassword(userId, userPassword);
-	}
 
 	@Override
 	public UserDto findByUserNum(Long userNum) throws Exception {
@@ -37,11 +32,6 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	@Override
-	public UserDto findByUserNumAndUserPassword(Long userNum, String userPassword) throws Exception {
-		return userMapper.findByUserNumAndUserPassword(userNum, userPassword);
-	}
-
-	@Override
 	public UserDto findByUserId(String userId) throws Exception {
 		return userMapper.findByUserId(userId);
 	}
@@ -51,8 +41,4 @@ public class UserDaoImpl implements UserDao{
 		return userMapper.findByUserEmail(userEmail);
 	}
 
-	@Override
-	public int updateTempPassword(UserDto userDto) throws Exception {
-		return userMapper.updateTempPassword(userDto);
-	}
 }

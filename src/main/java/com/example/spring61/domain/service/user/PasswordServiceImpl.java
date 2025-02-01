@@ -12,10 +12,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PasswordServiceImpl implements PasswordService{
-	@Autowired
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	public String encodePassword(String password) {
+	public String encode(String password) {
 		return passwordEncoder.encode(password);
 	}
 

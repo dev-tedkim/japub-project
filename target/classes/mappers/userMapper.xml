@@ -17,10 +17,6 @@
 	VALUES(#{userNum}, #{userId}, #{userPassword}, #{userEmail}, #{userZipCode}, #{userAddress}, #{userDetailAddress}, #{userPhoneNumber})
   </insert>
   
-  <select id="findByUserIdAndUserPassword" resultType="userDto">
-  	 	SELECT USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_PHONE_NUMBER, USER_ROLE
-		FROM TBL_USER WHERE USER_ID = #{userId} AND USER_PASSWORD = #{userPassword}
-  </select>
   
   <update id="update">
   	UPDATE TBL_USER
@@ -28,10 +24,6 @@
   	WHERE USER_NUM = #{userNum}
   </update>
   
-  <select id="findByUserNumAndUserPassword" resultType="userDto">
-  	 	SELECT USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_PHONE_NUMBER, USER_ROLE
-		FROM TBL_USER WHERE USER_NUM = #{userNum} AND USER_PASSWORD = #{userPassword}
-  </select>
   
   <select id="findByUserId" resultType="userDto">
   		SELECT USER_NUM, USER_ID, USER_PASSWORD, USER_EMAIL, USER_ZIP_CODE, USER_ADDRESS, USER_DETAIL_ADDRESS, USER_PHONE_NUMBER, USER_ROLE
@@ -43,10 +35,4 @@
 		FROM TBL_USER WHERE USER_EMAIL = #{userEmail} 
   </select>
 
-  <update id="updateTempPassword">
-	  	UPDATE TBL_USER
-	  	SET USER_PASSWORD = #{userPassword}
-	  	WHERE USER_NUM = #{userNum}
-  </update>
 </mapper>
-

@@ -30,12 +30,12 @@
 	        <input type="hidden" name="boardNum" value="" />
 	        <input type="text" name="boardTitle" placeholder="제목을 입력하세요" value="${board.boardTitle}" />
 	        <textarea name="boardContent" rows="20" placeholder="내용을 입력하세요"><c:out value="${board.boardContent}" /></textarea>
-	        <c:if test="${not empty adminNum}">
+	      <%--   <c:if test="${not empty adminNum}"> --%>
 		       <input type="file" name="multipartFiles" multiple />
 		       <div class="thumbnailDiv">
 			   		<ul class="thumbnailUl"></ul>
 			   </div>  
-			</c:if>
+		<%-- 	</c:if> --%>
 	      </form>
 	    </div>
     </main>
