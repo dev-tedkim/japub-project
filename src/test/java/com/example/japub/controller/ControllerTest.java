@@ -1,4 +1,4 @@
-package com.example.spring61.controller;
+package com.example.japub.controller;
 
 import java.util.List;
 

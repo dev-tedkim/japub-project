@@ -1,4 +1,4 @@
-package com.example.spring61.domain.service;
+package com.example.japub.domain.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
