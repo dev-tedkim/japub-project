@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+div.join-box {
+	width: 400px;
+	margin: 9vh auto;
+	border: 1px solid rgb(240, 240, 240);
+	box-shadow: 0 2px 4px rgb(0, 0, 0, 0.1);
+	border-radius: 10px;
+	padding-bottom: 33.5px;
+}
+
+div.join-header {
+	padding: 33.5px 0;
+	text-align: center;
+}
+
+div.join-header>span {
+	font-weight: bold;
+	cursor: pointer;
+	color: #000;
+	font-size: 25px;
+}
+
+form[name='joinForm'] input {
+	border: 1px solid rgb(240, 240, 240);
+	outline-color: rgb(235, 235, 235);
+	border-radius: 6px;
+	height: 35px;
+	width: 300px;
+}
+
+form[name='joinForm'] input[type='button']:hover, form[name='joinForm'] input[type='submit']:hover
+	{
+	background-color: rgb(230, 230, 230);
+}
+
+div.join-input-div {
+	width: 300px;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+div.join-input-div>input[type='text'], div.join-input-div>input[type='password']
+	{
+	padding: 10px;
+}
+
+.error-msg {
+	display: none;
+	font-size: 12px;
+	font-weight: bold;
+	color: red;
+	margin-bottom: -7px;
+}
+
+.find-address {
+	width: 300px;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+.find-address>div {
+	display: flex;
+	justify-content: space-between;
+}
+
+.find-address>div>input[type='text'] {
+	width: 235px;
+	padding: 10px;
+}
+
+.find-address>div>input[type='button'] {
+	width: 60px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+div.join-input-div:last-child {
+	margin-bottom: 0;
+}
+
+div.join-input-div:last-child>input {
+	cursor: pointer;
+	font-weight: bold;
+}
+/* join -------------------------------------------*/

@@ -1,0 +1,250 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Noto Sans KR', serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	height: 100vh; /* 화면 전체 높이를 사용 */
+	display: flex;
+	flex-direction: column; /* 세로 방향 레이아웃 */
+}
+
+.main {
+	flex: 1 1 auto;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+.header {
+	border-bottom: 1px solid #dedede;
+	display: flex;
+}
+
+.header>h1 {
+	width: 20%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	height: 80px;
+	justify-content: center;
+}
+
+.header>h1:hover {
+	color: red;
+}
+
+.header>nav {
+	width: 80%;
+	font-size: 15px;
+}
+
+.header>nav>ul {
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	height: 70px;
+	padding-right: 60px;
+}
+
+.header>nav>ul>li, .header>nav>ul>li a {
+	position: relative;
+	display: block;
+	width: 100px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	padding: 0 5px;
+}
+
+.header>nav>ul>li a:hover {
+	background-color: rgb(240, 240, 240);
+	font-weight: bold;
+}
+
+ul.submenu {
+	position: absolute;
+	overflow: hidden;
+	transition: all 0.7s;
+	visibility: hidden;
+	z-index: 999;
+}
+/* header끝 -------------------------------*/
+footer {
+	padding: 10px 0;
+	border-top: 1px solid #dedede;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-around;
+	border-top: 1px solid #dedede;
+}
+
+footer>h2 {
+	width: 20%;
+	text-align: center;
+	line-height: 70px;
+}
+
+footer>nav {
+	display: flex;
+	align-items: center;
+}
+
+footer>nav>ul {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+footer>nav>ul>li>a {
+	display: block;
+	width: 65px;
+	height: 65px;
+}
+
+footer>nav>ul>li>a>img {
+	display: block;
+	width: 100%;
+}
+
+footer>div.footer-left {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+footer>div.footer-left ul {
+	display: flex;
+	font-size: 14px;
+	color: #666;
+}
+
+footer>div.footer-left ul>li {
+	font-size: 14px;
+	color: #666;
+	padding-right: 10px;
+	margin-right: 10px;
+	position: relative;
+}
+
+footer>div.footer-left ul>li:not(:last-child):after {
+	content: '';
+	display: block;
+	width: 1px;
+	height: 10px;
+	background: #dedede;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-top: -5px;
+}
+
+footer>div.footer-center {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start; /* ← 좌측 정렬 */
+	gap: 8px; /* ul 간 간격 */
+}
+
+footer>div.footer-center ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 16px; /* 줄바꿈 + 좌우 간격 */
+	padding: 0;
+	margin: 0;
+}
+
+footer>div.footer-center ul>li {
+	min-width: 180px; /* 너무 줄어들지 않게 */
+	font-size: 14px;
+	color: #666;
+	white-space: normal;
+	word-break: keep-all;
+}
+
+footer>div.footer-center>ul>li:not(:last-child):after {
+	content: '';
+	display: block;
+	width: 1px;
+	height: 10px;
+	background: #dedede;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-top: -5px;
+}
+
+footer .footer-left {
+	display: flex;
+	align-items: center;
+}
+
+footer .footer-left>ul {
+	display: flex;
+	justify-content: space-between;
+}
+
+footer .footer-left>ul>li {
+	margin-left: 10px;
+}
+
+footer .footer-left>ul>li:nth-child(1) {
+	margin: 0;
+}
+
+footer>div.footer-left ul>li:not(:last-child):after {
+	content: none;
+}
+
+footer nav.footer-nav>ul>li>a {
+	white-space: nowrap;
+}
+/* ---------------------------- */
+@media ( max-width : 600px) {
+	footer {
+		flex-direction: column;
+		align-items: center;
+	}
+	footer>div.footer-left, footer>div.footer-center, footer>nav {
+		width: 100%;
+		margin-bottom: 20px;
+		justify-content: center;
+	}
+	footer>div.footer-center {
+		flex-direction: column;
+		align-items: center;
+	}
+	footer>div.footer-center ul {
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+	footer>div.footer-center ul>li {
+		margin-right: 0;
+		padding-right: 0;
+		position: static;
+	}
+	footer>div.footer-center ul>li:not(:last-child):after {
+		display: none;
+	}
+	footer>nav>ul {
+		justify-content: center;
+		gap: 10px;
+	}
+	footer>nav>ul>li>a {
+		width: 50px;
+		height: 50px;
+	}
+}
+/* footer------------------------ */

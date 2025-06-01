@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+.tableContianer {
+	display: flex;
+	justify-content: center;
+	margin: 8vh auto;
+}
+/* 판매서점 */

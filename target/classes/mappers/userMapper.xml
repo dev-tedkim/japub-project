@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.japub.domain.mapper.UserMapper">
+	<select id="findByUserId" resultType="userDto">
+		SELECT user_num, user_id, user_password, user_email, user_phone, user_zip_code, user_address, user_detail_address, user_role
+		FROM tbl_user 
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="findByUserEmail" resultType="userDto">
+		SELECT user_num, user_id, user_password, user_email, user_phone, user_zip_code, user_address, user_detail_address, user_role
+		FROM tbl_user 
+		WHERE user_email = #{userEmail}
+	</select>
+	
+	<select id="findByUserNum" resultType="userDto">
+		SELECT user_num, user_id, user_password, user_email, user_phone, user_zip_code, user_address, user_detail_address, user_role
+		FROM tbl_user 
+		WHERE user_num = #{userNum}
+	</select>
+	
+	<insert id="insert" keyProperty="userNum" useGeneratedKeys="true">
+		INSERT INTO tbl_user
+		(user_id, user_password, user_email, user_phone, user_zip_code, user_address, user_detail_address, user_role)
+		VALUES(#{userId}, #{userPassword}, #{userEmail}, #{userPhone}, #{userZipCode}, #{userAddress}, #{userDetailAddress}, #{userRole})
+	</insert>
+	
+	<update id="update">
+		UPDATE tbl_user
+		SET user_password = #{userPassword}
+		WHERE user_num = #{userNum}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM tbl_user
+		WHERE user_num = #{userNum}
+	</delete>
+</mapper>
+

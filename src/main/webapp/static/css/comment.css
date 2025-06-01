@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+div.comment-container {
+	width: 50%;
+	margin: 30px auto;
+}
+
+div.comment-container>ul>li {
+	border: 1px solid rgb(240, 240, 240);
+	border-bottom: 0;
+	padding: 18px;
+	padding-bottom: 0;
+	background-color: rgb(249, 249, 249);
+}
+
+div.comment-container>ul>li:last-child {
+	border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+div.comment-container>ul>li>span {
+	position: absolute;
+	font-size: 27px;
+	width: 27px;
+	height: 27px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+div.comment-container .writer {
+	font-weight: bold;
+}
+
+div.comment-container>ul>li>section {
+	margin-left: 30px;
+}
+
+div.comment-container>ul>li>section>div:nth-child(3) {
+	font-size: 14px;
+	padding: 5px 0;
+}
+
+div.comment-container>ul>li>section>div:nth-child(3)>a:hover {
+	font-weight: bold;
+}
+
+.comment-container textarea {
+	resize: none;
+	border: none;
+	outline: none;
+	padding: 5px;
+	display: block;
+	width: 100%;
+	border-radius: 6px;
+}
+
+div.update-li-btn-div {
+	text-align: right;
+}
+
+div.update-li-btn-div>a {
+	font-size: 16px;
+	display: inline-block;
+	margin: 0;
+}
+
+div.update-li-btn-div>a:nth-child(1) {
+	margin-right: 10px;
+}
+
+div.update-li-btn-div>a:nth-child(3) {
+	display: none;
+}
+
+.comment-footer>a {
+	margin-left: 5px;
+}
+
+div.comment-input {
+	border: 1px solid rgb(240, 240, 240);
+	border-radius: 6px;
+	margin-top: 10px;
+}
+
+div.comment-input>div:nth-of-type(1) {
+	padding: 5px;
+	padding-bottom: 0;
+}
+
+div.comment-input>div:nth-of-type(2) {
+	padding: 5px;
+	text-align: right;
+}
+
+div.comment-input>div:nth-of-type(2)>a {
+	display: inline-block;
+	padding: 6px 12px;
+	background-color: rgb(235, 235, 235);
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+div.comment-input>div:nth-of-type(2)>a:hover {
+	background-color: rgb(230, 230, 230);
+}
+
+div.comment-input textarea {
+	padding: 0;
+	padding: 5px 7px;
+}
+
+li.update-li {
+	display: none;
+}
+
+span.pid {
+	color: blue;
+	font-weight: bold;
+}
+
+a.comment-show-btn {
+	text-align: center;
+	display: block;
+	margin: 15px 0;
+}
+
+.comment-more-btn {
+	cursor: pointer;
+	display: block;
+	text-align: center;
+}
+
+.comment-parent-id {
+	font-weight: bold;
+	color: blue;
+}
+
+/* comment */

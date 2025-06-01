@@ -1,0 +1,171 @@
+@charset "UTF-8";
+
+.container {
+	width: 50%;
+	margin: auto;
+	margin-top: 3%;
+	background: white;
+	background: white;
+}
+
+/* 제목과 버튼 그룹 가로 배치 */
+.header-with-buttons {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	gap: 10px;
+	border-bottom: 1px solid #dedede;
+	padding: 20px;
+	border-top: 1px solid #000;
+}
+
+.title-input {
+	width: 100%;
+	font-size: 20px;
+	border: none;
+	outline: none;
+	font-family: 'Noto Sans KR', sans-serif;
+	letter-spacing: -1px;
+	background: transparent;
+	color: #000;
+	font-weight: 500;
+}
+
+h1.title {
+	margin: 0;
+	flex-grow: 1; /* 제목이 남는 공간 차지 */
+	word-break: keep-all;
+	font-size: 20px;
+	letter-spacing: -1px;
+	font-weight: 500;
+}
+
+.btn-group {
+	display: flex;
+	gap: 10px;
+	flex-shrink: 0;
+	align-items: center;
+}
+
+/* 게시글 정보 */
+.post-info {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	color: #666;
+	font-size: 0.9rem;
+	padding: 20px;
+	border-bottom: 1px solid #dedede;
+}
+
+.post-info span {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	line-height: 1; /* ✅ 추가: 텍스트/아이콘 높이 맞춤 */
+}
+
+.post-info i {
+	color: #888;
+	font-size: 1.1rem;
+	position: relative;
+	top: 1px; /* ✅ 아주 살짝 위로 보정 */
+}
+
+/* 게시글 내용 */
+.post-content>div.board-content {
+	font-size: 1.1rem;
+	color: #222;
+	line-height: 1.5;
+	padding: 20px;
+}
+
+.board-content textarea {
+	width: 100%;
+	min-height: 300px;
+	font-size: 1.1rem;
+	color: #222;
+	line-height: 1.5;
+	border: none;
+	resize: none;
+	outline: none;
+}
+
+.img-box img {
+	max-width: 100%;
+	height: auto;
+	margin: auto;
+	display: block;
+}
+
+/* 버튼 스타일 - 연한 회색 계열 */
+.btn {
+	display: inline-block;
+	border-radius: 6px;
+	font-size: 0.95rem;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	margin-right: 0; /* gap으로 대신함 */
+	padding: 6px 12px;
+	background-color: rgb(240, 240, 240);
+}
+
+.btn i {
+	margin-right: 8px;
+}
+
+.btn:hover {
+	background-color: rgb(230, 230, 230);
+	color: #1f2937; /* 더 짙은 텍스트 */
+}
+
+div.board-content-line {
+	padding: 25px 0;
+	border-bottom: 1px solid #dedede;
+}
+
+input[name=multipartFiles] {
+	margin: 10px;;
+}
+/* boardWrite */
+ul.thumbnailUl {
+	display: flex;
+}
+
+ul.thumbnailUl>li {
+	width: 100px;
+	position: relative;
+}
+
+img.file-cancel-btn {
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+ul.thumbnailUl>li {
+	width: 100px;
+	position: relative;
+}
+
+img.file-cancel-btn {
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+/* thumbnail */
+.video-id-box {
+	padding: 15px 20px;
+	border-bottom: 1px solid #dedede;
+}
+
+.video-id-input {
+	width: 100%;
+	border: none;
+	outline: none;
+	letter-spacing: -1px;
+	background: transparent;
+	color: #000;
+}
