@@ -23,8 +23,10 @@
                 <h1 class="title"><c:out value="${board.boardTitle}" /></h1>
                 <div class="btn-group">
                     <a href="<c:url value='/board/list${criteria.params}&referrer=${criteria.referrer}' />" class="btn"><i class="fa fa-bars"></i> 목록</a>
-                    <a href="<c:url value='/board/update${criteria.params}&boardNum=${board.boardNum}' />" class="btn"><i class="fa fa-pencil"></i> 수정</a>
-                    <a href="<c:url value='/board/delete${criteria.params}&boardNum=${board.boardNum}' />" class="btn deleteBoardBtn"><i class="fa fa-trash"></i> 삭제</a>
+                    <c:if test="${sessionScope.isAdmin and sessionScope.userNum eq board.userNum}">
+	                    <a href="<c:url value='/board/update${criteria.params}&boardNum=${board.boardNum}' />" class="btn"><i class="fa fa-pencil"></i> 수정</a>
+	                    <a href="<c:url value='/board/delete${criteria.params}&boardNum=${board.boardNum}' />" class="btn deleteBoardBtn"><i class="fa fa-trash"></i> 삭제</a>
+                    </c:if>
                 </div>
             </div>
 

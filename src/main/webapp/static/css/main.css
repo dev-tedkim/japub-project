@@ -207,3 +207,6 @@ iframe {
 	background-color: #f0f0f0;
 }
 /* 추천도서 수정삭제 버튼 */
+.slide-img {
+	cursor: pointer;
+}

@@ -97,7 +97,7 @@ $("input[name=userEmail]").on("blur", function(e) {
 	const userEmail = $input.val().trim();
 	if (!userEmail || $input.prop("readonly")) { return; }
 	const isSuccess = validateEmail(userEmail);
-	const msg = isSuccess ? "" : "잘못된 아이디 입니다.";
+	const msg = isSuccess ? "" : "잘못된 이메일 입니다.";
 	changeCss($input, isSuccess, msg);
 	setValidationCheck($input, validationChecks, isSuccess);
 	if (!isSuccess) { return; }
@@ -113,7 +113,7 @@ $("input[name=userPassword]").on("blur", function() {
 	const password = $input.val().trim();
 	if (!password || $input.prop("readonly")) { return; }
 	const isSuccess = validatePassword(password);
-	const msg = isSuccess ? "" : "잘못된 비밀번호 입니다.";
+	const msg = isSuccess ? "" : getPasswordErrorMsg(password);
 	changeCss($input, isSuccess, msg);
 	setValidationCheck($input, validationChecks, isSuccess);
 	$("input[name=userPasswordCheck]").trigger("blur");
@@ -181,6 +181,23 @@ function validateId(id) { /*아이디 정규식*/
 function validatePassword(password) {
 	const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=])[A-Za-z\d!@#$%^&*()_\-+=]{8,16}$/;
 	return regex.test(password);
+}
+
+// 조건별 상세 체크 함수
+function getPasswordErrorMsg(password) {
+	if (password.length < 8 || password.length > 16) {
+		return "비밀번호는 8자 이상 16자 이하로 입력하세요.";
+	}
+	if (!/[a-zA-Z]/.test(password)) {
+		return "영문자를 최소 1자 이상 포함해야 합니다.";
+	}
+	if (!/\d/.test(password)) {
+		return "숫자를 최소 1자 이상 포함해야 합니다.";
+	}
+	if (!/[!@#$%^&*()_\-+=]/.test(password)) {
+		return "특수문자(!@#$%^&*()_-+=)를 최소 1자 이상 포함해야 합니다.";
+	}
+	return "";
 }
 
 function validateEmail(email) { /*이메일정규식*/

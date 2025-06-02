@@ -23,13 +23,19 @@
         <div id="slide-swiper" class="swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
-              <img src="<c:url value='/static/images/slide/slide1.jpg' />" />
+              <img class="slide-img" src="<c:url value='/static/images/slide/slide1.jpg' />" />
             </div>
             <div class="swiper-slide">
-              <img src="<c:url value='/static/images/slide/slide2.jpg' />" />
+              <img class="slide-img" src="<c:url value='/static/images/slide/slide2.jpg' />" />
+            </div>
+            <div class="swiper-slide">
+              <img class="slide-img" src="<c:url value='/static/images/slide/slide3.jpg' />" />
+            </div>
+            <div class="swiper-slide">
+              <img class="slide-img" src="<c:url value='/static/images/slide/slide4.jpg' />" />
             </div>
           </div>
-          <div class="swiper-pagination"></div>
+          <div class="slide-img" class="swiper-pagination"></div>
         </div>
       </div>
     </section>

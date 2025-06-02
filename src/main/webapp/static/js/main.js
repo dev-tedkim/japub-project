@@ -37,3 +37,7 @@ $("a.recommend-cancel-btn").on("click", function(e) {
 	$form.submit();
 });
 
+
+$(".slide-img").on("click", function() {
+	location.href = `${contextPath}/products/list`;
+});
