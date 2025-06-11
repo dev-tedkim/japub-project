@@ -36,10 +36,9 @@ public class ProductController {
 	private final FileService fileService;
 	private final HttpSession session;
 	private static final String DEFAULT_DERECTORY = "C:/upload/products";
-	private static final int PRODUCT_AMOUNT = 30;
+	private static final int DEFAULT_AMOUNT = 30;
 	private static final int MAX_RECOMMEND_SIZE = 8;
 	private static final String MAX_RECOMMEND_MSG = "추천 도서는 최대 8개까지만 설정할 수 있습니다.";
-	public static final String SUCCESS_MSG = "요청이 정상적으로 처리되었습니다.";
 
 	private String isAdminRedirect(RedirectAttributes attributes, HttpSession session) {
 		if (!SessionUtil.isAdmin(session)) {
@@ -51,10 +50,12 @@ public class ProductController {
 
 	@GetMapping("/list")
 	public String list(Criteria criteria, Model model) {
-		criteria.setAmount(PRODUCT_AMOUNT);
+		criteria.setAmount(DEFAULT_AMOUNT);
 		List<ProductDto> products = productService.findByCriteria(criteria);
-		productService.setProductThumbnailUrl(products);
-		productService.setProductDiscountPrice(products);
+		products.forEach(product -> {
+			product.setProductDiscountPrice(productService.getProductDiscountPrice(product));
+			product.setProductThumbnailUrl(productService.getProductThumbnailUrl(product));
+		});
 		model.addAttribute("products", products);
 		model.addAttribute("pageDto", new PageDto(criteria, productService.countByCriteria(criteria)));
 		return "products/list";
@@ -72,38 +73,33 @@ public class ProductController {
 	@PostMapping("/register")
 	public String register(ProductDto productDto, MultipartFile multipartFile, Criteria criteria,
 			RedirectAttributes attributes) {
-		String redirect = isAdminRedirect(attributes,session);
+		String redirect = isAdminRedirect(attributes, session);
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
 		String datePath = fileService.getDatePath();
 		File uploadPath = fileService.getUploadPath(DEFAULT_DERECTORY, datePath);
-		try {
-			productDto = productService.upload(multipartFile, productDto, uploadPath, datePath);
-			if (!productService.insert(productDto)) {
-				throw new RuntimeException("productController insert error");
-			}
-			return "redirect:/products/list";
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!productService.insert(multipartFile, productDto, uploadPath, datePath)) {
 			attributes.addFlashAttribute("msg", MessageConstants.ERROR_MSG);
+			attributes.addFlashAttribute("product", productDto);
 			return "redirect:/products/register" + criteria.getProductParams();
 		}
+		return "redirect:/products/list";
+
 	}
 
 	@GetMapping("/update")
 	public String update(Criteria criteria, Long productNum, Model model, RedirectAttributes attributes) {
-		String redirect = isAdminRedirect(attributes,session);
+		String redirect = isAdminRedirect(attributes, session);
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
 		if (productNum == null) {
+			attributes.addFlashAttribute("msg", MessageConstants.ERROR_MSG);
 			return "redirect:/products/list" + criteria.getProductParams();
 		}
 		ProductDto productDto = productService.findByProductNum(productNum);
-		String productThumbnailUrl = productDto.getProductUploadPath() + "/t_" + productDto.getProductUuid() + "_"
-				+ productDto.getProductImageName();
-		productDto.setProductThumbnailUrl(productThumbnailUrl);
+		productDto.setProductThumbnailUrl(productService.getProductThumbnailUrl(productDto));
 		model.addAttribute("product", productDto);
 		return "products/update";
 	}
@@ -111,33 +107,23 @@ public class ProductController {
 	@PostMapping("/update")
 	public String update(MultipartFile multipartFile, Criteria criteria, ProductDto productDto,
 			RedirectAttributes attributes) {
-		String redirect = isAdminRedirect(attributes,session);
+		String redirect = isAdminRedirect(attributes, session);
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
-		if (multipartFile.isEmpty()) {
-			productService.update(productDto);
-			return "redirect:/products/list" + criteria.getProductParams();
-		}
 		String datePath = fileService.getDatePath();
 		File uploadPath = fileService.getUploadPath(DEFAULT_DERECTORY, datePath);
-		try {
-			productDto = productService.upload(multipartFile, productDto, uploadPath, datePath);
-			if (!productService.update(productDto)) {
-				throw new RuntimeException("productController update error");
-			}
-			return "redirect:/products/list" + criteria.getProductParams();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!productService.update(multipartFile, productDto, uploadPath, datePath)) {
 			attributes.addFlashAttribute("msg", MessageConstants.ERROR_MSG);
 			attributes.addAttribute("productNum", productDto.getProductNum());
 			return "redirect:/products/update" + criteria.getProductParams();
 		}
+		return "redirect:/products/list" + criteria.getProductParams();
 	}
 
 	@PostMapping("/recommend/add")
 	public String recommend(Criteria criteria, Long productNum, RedirectAttributes attributes) {
-		String redirect = isAdminRedirect(attributes,session);
+		String redirect = isAdminRedirect(attributes, session);
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
@@ -153,7 +139,7 @@ public class ProductController {
 
 	@PostMapping("/recommend/cancel")
 	public String recommendCancel(Criteria criteria, Long productNum, RedirectAttributes attributes) {
-		String redirect = isAdminRedirect(attributes,session);
+		String redirect = isAdminRedirect(attributes, session);
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
@@ -165,13 +151,12 @@ public class ProductController {
 
 	@PostMapping("/delete")
 	public String delete(Criteria criteria, Long productNum, RedirectAttributes attributes) {
-		String redirect = isAdminRedirect(attributes,session);
+		String redirect = isAdminRedirect(attributes, session);
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
 		if (!productService.deleteByProductNum(productNum)) {
 			attributes.addFlashAttribute("msg", MessageConstants.ERROR_MSG);
-			System.out.println("들어옴");
 		}
 		return "redirect:/products/list" + criteria.getProductParams();
 	}

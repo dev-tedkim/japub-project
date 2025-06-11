@@ -11,14 +11,14 @@ import com.app.japub.domain.dto.FileDto;
 import com.app.japub.domain.dto.ProductDto;
 
 public interface ProductService {
-	public abstract boolean insert(ProductDto productDto);
+	public abstract boolean insert(MultipartFile multipartFile, ProductDto productDto, File uploadPath, String datePath);
 	public abstract boolean deleteByProductNum(Long productNum);
-	public abstract boolean update(ProductDto productDto);
+	public abstract boolean update(MultipartFile multipartFile, ProductDto productDto, File uploadPath, String datePath);
 	public abstract List<ProductDto> findByCriteria(Criteria criteria);
 	public abstract Long countByCriteria(Criteria criteria);
-	public abstract ProductDto upload(MultipartFile multipartFile, ProductDto productDto, File uploadPath, String datePath);
-	public abstract void setProductThumbnailUrl(List<ProductDto> products);
-	public abstract void setProductDiscountPrice(List<ProductDto> products);
+	public abstract void upload(MultipartFile multipartFile, ProductDto productDto, File uploadPath, String datePath);
+	public abstract String getProductThumbnailUrl(ProductDto productDto);
+	public abstract int getProductDiscountPrice(ProductDto productDto);
 	public abstract ProductDto findByProductNum(Long productNum);
 	public abstract List<ProductDto> findByProductIsRecommend(boolean productIsRecommend);
 	public abstract boolean updateProductIsRecommend(@Param("productNum") Long productNum, @Param("productIsRecommend") boolean productIsRecommend);

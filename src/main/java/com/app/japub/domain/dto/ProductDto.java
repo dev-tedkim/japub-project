@@ -6,7 +6,7 @@ import lombok.Data;
 public class ProductDto {
 	private Long productNum;
 	private String productUuid;
-	private String productImageName;
+	private String productName;
 	private String productUploadPath;
 	private String productTitle;
 	private int productPrice;

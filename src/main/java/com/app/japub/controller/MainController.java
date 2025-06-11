@@ -26,14 +26,14 @@ public class MainController {
 	@GetMapping("/main")
 	public void main(Model model) {
 		List<ProductDto> recommendProducts = productService.findByProductIsRecommend(true);
-		productService.setProductThumbnailUrl(recommendProducts);
+		recommendProducts.forEach(product -> product.setProductThumbnailUrl(productService.getProductThumbnailUrl(product)));
 		model.addAttribute("recommendProducts", recommendProducts);
 
 		Criteria criteria = new Criteria();
 		criteria.setCategory("");
 		criteria.setAmount(8);
 		List<ProductDto> newProducts = productService.findByCriteria(criteria);
-		productService.setProductThumbnailUrl(newProducts);
+		newProducts.forEach(product -> product.setProductThumbnailUrl(productService.getProductThumbnailUrl(product)));
 		model.addAttribute("newProducts", newProducts);
 
 		criteria = new Criteria();
