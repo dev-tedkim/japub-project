@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.app.japub.domain.mapper.BoardMapper">
+
+	<select id="findByBoardNum" resultType="boardDto">
+		SELECT board_num,
+		board_title, board_content, board_register_date, board_update_date,
+		board_category, board_read_count, board_video_id, u.user_num, user_id
+		FROM tbl_user u
+		join tbl_board b on board_num = #{boardNum} AND u.user_num =
+		b.user_num
+	</select>
+
+	<select id="findByCriteria" resultType="boardDto">
+		SELECT board_num, board_title, board_content, board_register_date,
+		board_update_date, board_category, board_read_count, u.user_num,
+		user_id
+		FROM tbl_user u join tbl_board b on u.user_num = b.user_num and
+		board_category = #{category}
+		<include refid="search" />
+		order by board_num desc
+		limit #{offset},#{amount}
+	</select>
+
+	<select id="countByCriteria" resultType="long">
+		SELECT count(board_num) from tbl_user u join tbl_board b
+		on u.user_num = b.user_num and board_category = #{category} <include refid="search"/>
+	</select>
+	<update id="incrementBoardReadCount">
+		UPDATE tbl_board
+		SET board_read_count =
+		board_read_count + 1
+		WHERE board_num = #{boardNum}
+	</update>
+
+	<insert id="insert" keyProperty="boardNum"
+		useGeneratedKeys="true">
+		INSERT INTO tbl_board
+		(board_title, board_content,
+		board_category, board_video_id, user_num)
+		VALUES(#{boardTitle}, #{boardContent},
+		#{boardCategory}, #{boardVideoId}, #{userNum} )
+	</insert>
+
+	<update id="update">
+		UPDATE tbl_board
+		SET
+		<if test="boardVideoId != null and boardVideoId != ''">
+			board_video_id = #{boardVideoId},
+		</if> 
+		board_title = #{boardTitle},
+		board_content = #{boardContent}, board_update_date = current_timestamp
+		WHERE user_num = #{userNum} AND board_num = #{boardNum}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM tbl_board
+		WHERE user_num = #{userNum} AND
+		board_num = #{boardNum}
+	</delete>
+	
+	<select id="findByUserNumAndBoardNum" resultType="boardDto">
+		SELECT board_num,
+		board_title, board_content, board_register_date, board_update_date,
+		board_category, board_read_count, u.user_num, user_id
+		FROM tbl_user u join tbl_board b on u.user_num = b.user_num
+		WHERE board_num = #{boardNum} and u.user_num = #{userNum} 
+	</select>
+
+	<sql id="search">
+		<if
+			test="type != null and type != '' and keyword != null and keyword != ''">
+			<trim prefixOverrides="or" prefix="and(" suffix=")">
+				<foreach collection="types" item="type">
+					<trim prefix="or">
+						<choose>
+							<when test="type == 'T'.toString()">
+								board_title like concat('%',#{keyword},'%')
+							</when>
+							<when test="type == 'C'.toString()">
+								board_content like concat('%',#{keyword},'%')
+							</when>
+							<when test="type == 'I'.toString()">
+								user_id like concat('%',#{keyword},'%')
+							</when>
+						</choose>
+					</trim>
+				</foreach>
+			</trim>
+		</if>
+	</sql>
+</mapper>
+

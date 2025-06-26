@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.japub.domain.mapper.CommentMapper">
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="commentNum">
+		INSERT INTO tbl_comment
+		(comment_parent_num, comment_parent_id, comment_content, user_num, board_num)
+		VALUES(#{commentParentNum}, #{commentParentId}, #{commentContent}, #{userNum}, #{boardNum})
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM tbl_comment
+		WHERE user_num = #{userNum} AND comment_num = #{commentNum}
+	</delete>
+
+	<update id="update">
+		UPDATE tbl_comment
+		SET comment_content = #{commentContent}, comment_update_date = current_timestamp
+		WHERE user_num = #{userNum} AND comment_num = #{commentNum}
+	</update>
+
+	<select id="countByBoardNum" resultType="long">
+		SELECT count(comment_num) FROM tbl_comment
+		WHERE board_num = #{boardNum}
+	</select>
+
+	<select id="findByCriteriaAndBoardNum" resultType="commentDto">
+		SELECT comment_num, IFNULL(comment_parent_num, comment_num) comment_parent_num, comment_parent_id, comment_content, comment_register_date, comment_update_date, u.user_num, board_num, user_id
+		FROM tbl_user u JOIN tbl_comment c ON u.user_num = c.user_num AND board_num = #{boardNum} ORDER BY comment_parent_num, comment_num
+		LIMIT 0, #{criteria.endRow}
+	</select>
+	
+	<select id="getNextPageCount" resultType="_int">
+			SELECT count(comment_num) FROM
+		(
+			SELECT comment_num, IFNULL(comment_parent_num, comment_num) comment_parent_num, comment_parent_id, comment_content, comment_register_date, comment_update_date, user_num, board_num
+			FROM tbl_comment
+			WHERE board_num = #{boardNum}
+			LIMIT #{criteria.offset}, #{criteria.amount} 
+		) comments   
+	</select>
+</mapper>
+

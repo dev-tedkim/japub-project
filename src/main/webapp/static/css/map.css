@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+.map {
+	margin: 35px auto;
+	display: block;
+}
+
+div#map {
+	margin: 3% auto;
+	width: 70%;
+	height: 350px;
+} /* map */

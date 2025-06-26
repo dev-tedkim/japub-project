@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/task 
+                           http://www.springframework.org/schema/task/spring-task.xsd">
+
+    
+
+	<!-- Quartz Scheduler 설정 -->
+    <!-- <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="fileTask" />
+        <property name="targetMethod" value="autoDeleteFiles" />
+    </bean>
+
+    <bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="cronExpression" value="0 * * * * ?" />
+        <property name="jobDetail" ref="jobDetail" />
+    </bean>
+
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="jobDetail" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="trigger" />
+            </list>
+        </property>
+    </bean> 
+ -->
+</beans>
