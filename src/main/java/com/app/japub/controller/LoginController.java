@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.app.japub.common.MessageConstants;
 import com.app.japub.common.SessionUtil;
 import com.app.japub.domain.dto.UserDto;
 import com.app.japub.domain.service.user.UserService;
@@ -35,7 +36,7 @@ public class LoginController {
 		UserDto userDto = userService.login(userId, userPassword);
 		if (userDto == null) {
 			String loginFailedMsg = "아이디 또는 비밀번호가 일치하지 않습니다.";
-			attributes.addFlashAttribute("msg", loginFailedMsg);
+			MessageConstants.addErrorMessage(attributes, loginFailedMsg);
 			return "redirect:/login";
 		}
 		session.setAttribute(SessionUtil.KEY, userDto.getUserNum());

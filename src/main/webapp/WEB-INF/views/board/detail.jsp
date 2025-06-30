@@ -96,7 +96,8 @@
     const sessionUserNum = '${sessionScope.userNum}';
     const category = "upload";
     const currentCategory = '${criteria.category}';
-    const isAdmin = '${isAdmin}';
+    let isAdmin = '${isAdmin}';
+    isAdmin = JSON.parse(isAdmin);
     
 </script>
 <script src="<c:url value='/static/js/script.js' />"></script>

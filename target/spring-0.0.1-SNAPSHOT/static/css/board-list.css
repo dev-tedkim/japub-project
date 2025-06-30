@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+.list-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 7vh;
+}
+
+.list-container>table {
+	width: 1000px;
+	border-collapse: collapse;
+	margin-bottom: 30px;
+	font-size: 15px;
+}
+
+.list-container>table tr th, .list-container>table tr td {
+	border-bottom: 1px solid rgb(249, 249, 249);
+	padding: 7px;
+	text-align: center;
+}
+
+.list-container>table tr:nth-child(odd) {
+	background: rgb(249, 249, 249);
+}
+
+.list-container>table caption {
+	text-align: right;
+	padding: 5px 0;
+}
+
+.list-container>table caption>a {
+	padding: 6px 12px;
+	background: rgb(240, 240, 240);
+	cursor: pointer;
+	border-radius: 6px;
+	display: inline-block;
+}
+
+.list-container>table caption>a:hover {
+	background: rgb(235, 235, 235);
+}
+
+.list-container>table td.boardTitle>a:hover {
+	font-weight: bold;
+}
+
+.search-form-div {
+	display: flex;
+	justify-content: center;
+	width: 1000px;
+	background: rgb(249, 249, 249);
+	padding: 15px 0;
+}
+
+form[name=searchForm] {
+	display: flex;
+	width: 600px;
+}
+
+form[name=searchForm]>select, form[name=searchForm]>input[type=submit] {
+	display: block;
+	width: 150px;
+	border: 1px solid rgb(240, 240, 240);
+	outline-color: rgb(235, 235, 235);
+	cursor: pointer;
+	text-align: center;
+}
+
+form[name=searchForm]>input[type=submit]:hover {
+	background: rgb(235, 235, 235);
+}
+
+form[name=searchForm]>input[type=text] {
+	display: block;
+	width: 300px;
+	border: 1px solid rgb(240, 240, 240);
+	outline-color: rgb(235, 235, 235);
+	height: 35px;
+	padding: 8px;
+}
+
+.page-div {
+	margin: 30px 0;
+}
+
+.page-div>ul {
+	display: flex;
+}
+
+.page-div>ul>li>a {
+	display: block;
+	width: 25px;
+	height: 20px;
+	text-align: center;
+	line-height: 20px;
+}
+
+td.boardTitle>a {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	display: block;
+	width: 75%;
+	margin: auto;
+}
+
+/* board list -----------------------------------*/

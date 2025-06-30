@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.japub.domain.mapper.FileMapper">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="fileNum">
+		INSERT INTO tbl_file
+		(file_uuid, file_upload_path, file_type, file_name, board_num, file_size)
+		VALUES(#{fileUuid}, #{fileUploadPath}, #{fileType}, #{fileName}, #{boardNum}, #{fileSize})
+	</insert>
+	
+	<select id="findByBoardNum" resultType="fileDto">
+		SELECT file_num, file_uuid, file_upload_path, file_type, file_name, board_num, file_size
+		FROM tbl_file
+		WHERE board_num = #{boardNum}
+	</select>
+	
+	<delete id="deleteByFileNum">
+		DELETE FROM tbl_file 
+		WHERE file_num = #{fileNum}
+	</delete>
+	
+	<select id="findByYesterDay" resultType="fileDto">
+		SELECT * FROM tbl_file WHERE file_upload_path  = DATE_FORMAT(current_timestamp  - INTERVAL 1 DAY, '%Y/%m/%d')
+	</select>
+</mapper>
+

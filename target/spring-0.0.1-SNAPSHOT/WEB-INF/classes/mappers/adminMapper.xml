@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.japub.domain.mapper.AdminMapper">
+	
+	<delete id="deleteByBoardNum">
+		DELETE FROM tbl_board 
+		WHERE board_num = #{boardNum}
+	</delete>
+	
+	<delete id="deleteByCommentNum" parameterType="long">		
+		delete from tbl_comment where comment_num = #{commentNum}
+	</delete>
+	
+	<update id="updateComment">
+		UPDATE tbl_comment
+		SET comment_content = #{commentContent}, comment_update_date = current_timestamp
+		WHERE comment_num = #{commentNum}
+	</update>
+	
+	
+</mapper>
+

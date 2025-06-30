@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.japub.domain.mapper.ProductMapper">
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="productNum">
+		INSERT INTO tbl_product
+		(product_uuid, product_name, product_upload_path, product_title, product_price, product_url, product_category)
+		VALUES(#{productUuid}, #{productName}, #{productUploadPath}, #{productTitle}, #{productPrice}, #{productUrl}, #{productCategory})
+	</insert>
+	
+	<select id="findByProductNum" resultType="productDto">
+		SELECT product_num, product_uuid, product_name, product_upload_path, product_title, product_price, 
+		product_url, product_category, product_register_date, product_update_date, product_is_recommend
+		FROM tbl_product WHERE product_num = #{productNum}
+	</select>
+	
+	<select id="findByCriteria" resultType="productDto">
+		SELECT product_num, product_name, product_upload_path, product_uuid, product_title, product_price, product_url, product_category, 
+		product_register_date, product_update_date, product_is_recommend
+		FROM tbl_product 
+		<where> 
+			<if test="category != null and category != ''">
+				product_category = #{category}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and product_title like concat('%',#{keyword},'%')
+			</if>
+		</where>
+		 <include refid="sort"/>
+		LIMIT #{offset}, #{amount}
+	</select>
+	
+	<select id="countByCriteria" resultType="long">
+		SELECT count(product_num) FROM tbl_product
+		<where>
+			<if test="category != null and category != ''">
+				product_category = #{category}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and product_title like concat('%',#{keyword},'%')
+			</if>
+		</where> 
+	</select>
+	
+	<select id="findByProductIsRecommend" resultType="productDto">
+		SELECT product_num, product_uuid, product_name, product_upload_path, product_title, product_price, product_url, 
+		product_category, product_register_date, product_update_date,product_is_recommend
+		FROM tbl_product WHERE product_is_recommend = 1
+		ORDER BY product_update_date DESC
+		LIMIT 0,8
+	</select>
+	
+	<delete id="deleteByProductNum">
+		DELETE FROM tbl_product
+		WHERE product_num = #{productNum}
+	</delete>
+	
+	<update id="update" parameterType="productDto">		
+		UPDATE tbl_product
+		SET
+		<if test="productUuid != null">
+			product_uuid=#{productUuid},
+		</if>
+		<if test="productName != null">
+			product_name=#{productName},
+		</if>
+		<if test="productUploadPath != null">
+			product_upload_path=#{productUploadPath},
+		</if> 
+		product_title=#{productTitle}, product_price=#{productPrice}, 
+		product_url=#{productUrl}, product_category=#{productCategory},  product_update_date=current_timestamp
+		WHERE product_num = #{productNum}
+	</update>
+	
+	<update id="updateProductIsRecommend">
+		UPDATE tbl_product
+		SET product_is_recommend = #{productIsRecommend}, product_update_date = current_timestamp
+		WHERE product_num = #{productNum}
+	</update>
+	
+	<select id="findByYesterDay" resultType="productDto">
+		SELECT * FROM tbl_product WHERE product_upload_path  = DATE_FORMAT(current_timestamp  - INTERVAL 1 DAY, '%Y/%m/%d')
+	</select>
+	
+	<sql id="sort">
+		<if test="sort != null and sort != ''">
+			<choose>
+				<when test="sort == 'recent'.toString()">
+					ORDER BY product_num DESC
+				</when>
+				<when test="sort == 'low_price'.toString()">
+					ORDER BY product_price asc, product_num DESC
+				</when>
+				<when test="sort == 'high_price'.toString()">
+					ORDER BY product_price desc, product_num DESC
+				</when>
+			</choose>
+		</if>
+	</sql>
+	
+	
+</mapper>
+
+
