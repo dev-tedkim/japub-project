@@ -41,7 +41,7 @@
         </div>
 
         <div class="join-input-div">
-          <input type="text" name="userPhone" placeholder="핸드폰번호" value="${user.userPhone}" />
+          <input type="text" name="userPhone" placeholder="핸드폰번호" value="${user.userPhone}" readonly="readonly" />
           <span class="error-msg"></span>
         </div>
 

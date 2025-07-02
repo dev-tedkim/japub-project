@@ -23,33 +23,33 @@ import lombok.RequiredArgsConstructor;
 public class MypageController {
 	private final UserService userService;
 	private final HttpSession session;
+	private static final String KEY_IS_DELETE = "isDelete";
+	private static final String KEY_USER = "user";
 
 	@GetMapping("/check-password")
-	public String checkPassword(String action, Model model) {
+	public String checkPassword(boolean isDelete, Model model) {
 		if (SessionUtil.getSessionNum(session) == null) {
-			return "redirect:/login";
+			return MessageConstants.LOGIN_URL;
 		}
-		model.addAttribute("delete", action);
+		addIsDeleteInModel(model, isDelete);
 		return "mypage/check-password";
 	}
 
-	@PostMapping("/check-password")
-	public String checkPassword(String userPassword, RedirectAttributes attributes, String action) {
+	@PostMapping("check-password")
+	public String checkPassword(String userPassword, boolean isDelete, RedirectAttributes attributes) {
 		Long userNum = SessionUtil.getSessionNum(session);
 		if (userNum == null) {
-			return "redirect:/mypage/login";
+			return MessageConstants.LOGIN_URL;
 		}
 		UserDto userDto = userService.findByUserNumAndUserPassword(userNum, userPassword);
 		if (userDto == null) {
 			String wrongPassword = "잘못된 비밀번호 입니다.";
 			MessageConstants.addErrorMessage(attributes, wrongPassword);
+			addIsDeleteQueryParam(attributes, isDelete);
 			return "redirect:/mypage/check-password";
 		}
 		MessageConstants.addSuccess(attributes);
-		if (action != null && "delete".equals(action)) {
-			return "redirect:/mypage/delete";
-		}
-		return "redirect:/mypage/update";
+		return isDelete ? "redirect:/mypage/delete" : "redirect:/mypage/update";
 	}
 
 	@GetMapping("/update")
@@ -63,54 +63,68 @@ public class MypageController {
 	}
 
 	@PostMapping("/update")
-	public String mypage(UserDto userDto, RedirectAttributes attributes) {
-		if (SessionUtil.getSessionNum(session) == null) {
-			return "redirect:/login";
+	public String update(UserDto userDto, RedirectAttributes attributes) {
+		Long userNum = SessionUtil.getSessionNum(session);
+		if (userNum == null) {
+			return MessageConstants.LOGIN_URL;
 		}
+		userDto.setUserNum(userNum);
 		if (!userService.update(userDto)) {
-			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
+			MessageConstants.addErrorMessage(attributes, MessageConstants.USER_NOT_FOUND_MSG);
 			MessageConstants.addSuccess(attributes);
 			return "redirect:/mypage/update";
 		}
 		session.invalidate();
-		return "redirect:/login";
+		return MessageConstants.LOGIN_URL;
 	}
 
 	@PostMapping("/delete")
-	public String delete(UserDto userDto, RedirectAttributes attributes) {
-		Long userNum = SessionUtil.getSessionNum(session);
-		if (userNum == null) {
-			return "redirect:/login";
+	public String delete(Long userNum, RedirectAttributes attributes) {
+		Long sessionUserNum = SessionUtil.getSessionNum(session);
+		if (sessionUserNum == null) {
+			return MessageConstants.LOGIN_URL;
 		}
-		if (!userService.delete(userNum)) {
-			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
-			MessageConstants.addSuccess(attributes);
-			return "redirect:/mypage/delete";
-		} else {
-			session.invalidate();
-			String msg = "회원탈퇴가 완료 되었습니다.";
-			MessageConstants.addErrorMessage(attributes, msg);
-			return "redirect:/login";
-		}
-	}
-
-	public String resolveView(RedirectAttributes attributes, Model model, boolean isDelete) {
-		Long userNum = SessionUtil.getSessionNum(session);
-		if (userNum == null) {
-			return "redirect:/login";
-		}
-		boolean isSuccess = MessageConstants.isSuccess(model);
-		if (!isSuccess) {
-			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
-			return isDelete ? "redirect:/mypage/check-password?action=delete" : "redirect:/mypage/check-password";
-		}
-		UserDto userDto = userService.findByUserNum(userNum);
-		if (userDto == null) {
+		if (userNum == null || !sessionUserNum.equals(userNum) || !userService.delete(userNum)) {
+			addIsDeleteQueryParam(attributes, true);
 			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
 			return "redirect:/mypage/check-password";
 		}
-		model.addAttribute("user", userDto);
+		String msg = "회원 탈퇴가 정상적으로 처리되었습니다.";
+		MessageConstants.addErrorMessage(attributes, msg);
+		session.invalidate();
+		return MessageConstants.LOGIN_URL;
+	}
+
+	private String resolveView(RedirectAttributes attributes, Model model, boolean isDelete) {
+		Long userNum = SessionUtil.getSessionNum(session);
+		if (userNum == null) {
+			return MessageConstants.LOGIN_URL;
+		}
+		boolean isSuccess = MessageConstants.isSuccess(model);
+		if (!isSuccess) {
+			addIsDeleteQueryParam(attributes, isDelete);
+			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
+			return "redirect:/mypage/check-password";
+		}
+		UserDto userDto = userService.findByUserNum(userNum);
+		if (userDto == null) {
+			addIsDeleteQueryParam(attributes, isDelete);
+			MessageConstants.addErrorMessage(attributes, MessageConstants.USER_NOT_FOUND_MSG);
+			return "redirect:/mypage/check-password";
+		}
+		addUserInModel(model, userDto);
 		return isDelete ? "mypage/delete" : "mypage/update";
 	}
 
+	private void addIsDeleteInModel(Model model, boolean isDelete) {
+		model.addAttribute(KEY_IS_DELETE, isDelete);
+	}
+
+	private void addIsDeleteQueryParam(RedirectAttributes attributes, boolean isDelete) {
+		attributes.addAttribute(KEY_IS_DELETE, isDelete);
+	}
+
+	private void addUserInModel(Model model, UserDto userDto) {
+		model.addAttribute(KEY_USER, userDto);
+	}
 }
