@@ -37,12 +37,12 @@ public class MainController {
 		model.addAttribute("newProducts", newProducts);
 
 		criteria = new Criteria();
-		criteria.setCategory("notice");
+		criteria.setCategory("media");
 		List<BoardDto> noticeBoards = formatBoardDates(boardService.findByCriteria(criteria));
-		criteria.setCategory("upload");
+		criteria.setCategory("download");
 		List<BoardDto> uploadBoards = formatBoardDates(boardService.findByCriteria(criteria));
-		model.addAttribute("noticeBoards", noticeBoards);
-		model.addAttribute("uploadBoards", uploadBoards);
+		model.addAttribute("mediaBoards", noticeBoards);
+		model.addAttribute("downloadBoards", uploadBoards);
 	}
 
 	private String formatDateString(String registerDate) {
@@ -62,9 +62,9 @@ public class MainController {
 		return boards;
 	}
 
-	@GetMapping("/test")
-	public String maintest() {
-		throw new NullPointerException("npe");
-	}
+	/*
+	 * @GetMapping("/test") public String maintest() { throw new
+	 * NullPointerException("npe"); }
+	 */
 
 }

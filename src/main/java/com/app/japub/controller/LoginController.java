@@ -39,8 +39,8 @@ public class LoginController {
 			MessageConstants.addErrorMessage(attributes, loginFailedMsg);
 			return "redirect:/login";
 		}
-		session.setAttribute(SessionUtil.KEY, userDto.getUserNum());
-		session.setAttribute(SessionUtil.ADMIN_KEY, userDto.isUserRole());
+		SessionUtil.addUserNumInSession(session, userDto);
+		SessionUtil.addIsAdminInSession(session, userDto);
 		setCookie(rememberId, userId, resp);
 		return "redirect:/main";
 	}

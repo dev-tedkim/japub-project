@@ -30,6 +30,11 @@ public class FileDaoImpl implements FileDao {
 	}
 
 	@Override
+	public int countByBoardNum(Long boardNum) {
+		return fileMapper.countByBoardNum(boardNum);
+	}
+
+	@Override
 	public List<FileDto> findByYesterDay() {
 		return fileMapper.findByYesterDay();
 	}

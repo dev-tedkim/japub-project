@@ -9,13 +9,11 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +22,6 @@ import com.app.japub.common.DbConstants;
 import com.app.japub.domain.dao.file.FileDao;
 import com.app.japub.domain.dto.BoardDto;
 import com.app.japub.domain.dto.FileDto;
-import com.app.japub.domain.dto.ProductDto;
 
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -34,20 +31,6 @@ import net.coobird.thumbnailator.Thumbnailator;
 public class FileServiceImpl implements FileService {
 	private final FileDao fileDao;
 	private static final int THUMBNAIL_SIZE = 100;
-
-	@Override
-	public void insertFiles(BoardDto boardDto) {
-		List<FileDto> files = boardDto.getFiles();
-		if (files == null || files.isEmpty()) {
-			return;
-		}
-		for (FileDto fileDto : files) {
-			fileDto.setBoardNum(boardDto.getBoardNum());
-			if (fileDao.insert(fileDto) != DbConstants.SUCCESS_CODE) {
-				throw new RuntimeException("fileService insert error");
-			}
-		}
-	}
 
 	@Override
 	public List<FileDto> findByBoardNum(Long boardNum) {
@@ -61,21 +44,32 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public void deleteFiles(BoardDto boardDto) {
-		List<FileDto> deleteFiles = boardDto.getDeleteFiles();
-		if (deleteFiles == null || deleteFiles.isEmpty()) {
+	public void insertFiles(BoardDto boardDto) {
+		List<FileDto> insertFiles = boardDto.getInsertFiles();
+		if (insertFiles == null || insertFiles.isEmpty()) {
 			return;
 		}
-		for (FileDto fileDto : deleteFiles) {
-			if (fileDao.deleteByFileNum(fileDto.getFileNum()) != DbConstants.SUCCESS_CODE) {
-				throw new RuntimeException("fileService deleteFiles error");
+
+		for (FileDto insertFile : insertFiles) {
+			insertFile.setBoardNum(boardDto.getBoardNum());
+			if (fileDao.insert(insertFile) != DbConstants.SUCCESS_CODE) {
+				throw new RuntimeException("fileService insertFiles error");
 			}
 		}
 	}
 
 	@Override
-	public String getDatePath() {
-		return new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+	public void deleteFiles(BoardDto boardDto) {
+		List<FileDto> deleteFiles = boardDto.getDeleteFiles();
+		if (deleteFiles == null || deleteFiles.isEmpty()) {
+			return;
+		}
+
+		for (FileDto deleteFile : deleteFiles) {
+			if (fileDao.deleteByFileNum(deleteFile.getFileNum()) != DbConstants.SUCCESS_CODE) {
+				throw new RuntimeException("fileService deleteFiles error");
+			}
+		}
 	}
 
 	@Override
@@ -88,37 +82,65 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public void createThumbnails(File originalFile, File thumbnailFile, int thumbnailSize) {
-		try (InputStream in = new FileInputStream(originalFile);
-				OutputStream out = new FileOutputStream(thumbnailFile);) {
-			Thumbnailator.createThumbnail(in, out, thumbnailSize, thumbnailSize);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("fileService createThumbnails error", e);
-		}
-	}
-
-	@Override
 	public boolean isImage(File file) {
 		try {
 			String contentType = Files.probeContentType(file.toPath());
 			return contentType != null && contentType.startsWith("image/");
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-			throw new RuntimeException("fileService isImage error", e);
+			throw new RuntimeException("fileService isImage error");
 		}
 	}
 
 	@Override
-	public FileDto upload(MultipartFile multipartFile, File uploadPath, String datePath) {
-		String uuid = UUID.randomUUID().toString();
+	public String getContentType(File file) {
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			if (contentType == null) {
+				String fileName = file.getName().toLowerCase();
+				if (!fileName.contains(".")) {
+					throw new RuntimeException("파일 확장자가 존재하지 않습니다.");
+				} else if (fileName.endsWith(".jpg")) {
+					contentType = "image/jpeg";
+				} else if (fileName.endsWith(".jpeg")) {
+					contentType = "image/jpeg";
+				} else if (fileName.endsWith(".gif")) {
+					contentType = "image/gif";
+				} else if (fileName.endsWith(".png")) {
+					contentType = "image/png";
+				} else {
+					throw new RuntimeException("지원하지 않는 파일 형식입니다.");
+				}
+			}
+			return contentType;
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("fileService getContentType error", e);
+		}
+	}
+
+	@Override
+	public void createThumbnails(File originalFile, File thumbnailFile, int size) {
+		try (InputStream in = new FileInputStream(originalFile);
+				OutputStream out = new FileOutputStream(thumbnailFile);) {
+			Thumbnailator.createThumbnail(in, out, size, size);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("fileService createThumbnails error");
+		}
+	}
+
+	@Override
+	public FileDto upload(MultipartFile multipartFile, String defaultDirectory, String datePath) {
+		File uploadPath = getUploadPath(defaultDirectory, datePath);
+		String fileUuid = UUID.randomUUID().toString();
 		String originalFileName = multipartFile.getOriginalFilename();
-		String fileName = uuid + "_" + originalFileName;
+		String fileName = fileUuid + "_" + originalFileName;
 		File file = new File(uploadPath, fileName);
 		try {
 			multipartFile.transferTo(file);
 			FileDto fileDto = new FileDto();
-			fileDto.setFileUuid(uuid);
+			fileDto.setFileUuid(fileUuid);
 			fileDto.setFileName(originalFileName);
 			fileDto.setFileSize(multipartFile.getSize());
 			fileDto.setFileUploadPath(datePath);
@@ -128,10 +150,30 @@ public class FileServiceImpl implements FileService {
 				createThumbnails(file, thumbnailFile, THUMBNAIL_SIZE);
 			}
 			return fileDto;
-		} catch (IllegalStateException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("fileService upload error", e);
+			throw new RuntimeException("fileService upload error");
 		}
+	}
+
+	@Override
+	public void autoDeleteFiles(List<FileDto> yesterDayFiles, String defaultDirectory, String yesterDayPath) {
+		List<Path> paths = new ArrayList<>();
+		yesterDayFiles.stream().map(file -> Paths.get(defaultDirectory, getThumbnailPath(file).replace("t_", "")))
+				.forEach(paths::add);
+		yesterDayFiles.stream().map(file -> Paths.get(defaultDirectory, getThumbnailPath(file))).forEach(paths::add);
+		Stream.of(new File(defaultDirectory, yesterDayPath).listFiles()).filter(file -> !paths.contains(file.toPath()))
+				.forEach(File::delete);
+	}
+
+	@Override
+	public String getThumbnailPath(FileDto fileDto) {
+		return fileDto.getFileUploadPath() + "/" + "t_" + fileDto.getFileUuid() + "_" + fileDto.getFileName();
+	}
+
+	@Override
+	public void setFilePath(FileDto fileDto) {
+		fileDto.setFilePath(getThumbnailPath(fileDto).replace("t_", ""));
 	}
 
 	@Override
@@ -145,23 +187,5 @@ public class FileServiceImpl implements FileService {
 		}
 	}
 
-	@Override
-	public void autoDeleteFiles(List<FileDto> yesterdayFiles, String defaultPath, String datePath) {
-		List<Path> filePaths = yesterdayFiles.stream().map(
-				file -> Paths.get(defaultPath, file.getFileUploadPath(), file.getFileUuid() + "_" + file.getFileName()))
-				.collect(Collectors.toList());
-
-		yesterdayFiles.stream().filter(FileDto::isFileType)
-				.map(file -> Paths.get(defaultPath, file.getFileUploadPath(),
-						"t_" + file.getFileUuid() + "_" + file.getFileName()))
-				.collect(Collectors.toList()).forEach(filePaths::add);
-
-		File[] deleteFiles = Paths.get(defaultPath, datePath).toFile()
-				.listFiles(file -> !filePaths.contains(file.toPath()));
-
-		if (deleteFiles != null) {
-			Arrays.asList(deleteFiles).forEach(File::delete);
-		}
-	}
 
 }

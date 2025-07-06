@@ -2,7 +2,6 @@ package com.app.japub.controller;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.japub.common.DateUtil;
 import com.app.japub.domain.dto.FileDto;
 import com.app.japub.domain.service.file.FileService;
 
@@ -30,44 +30,44 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileController {
 	private final FileService fileService;
-	private static final String DEFAULT_DERECTORY = "C:/upload/download";
+	private static final String DEFAULT_DIRECTORY = "C:/upload/files";
+	private static final String DOWNLOAD_DIRECTORY = "C:/upload/download";
 
 	@GetMapping("/display")
-	public ResponseEntity<byte[]> display(String fileName) {
-		File file = new File(DEFAULT_DERECTORY, fileName);
+	public ResponseEntity<byte[]> display(String filePath, String category) {
+		File file = new File(getDefaultDirectory(category), filePath);
 		if (!file.exists()) {
-			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
 		try {
+			String contentType = fileService.getContentType(file);
 			HttpHeaders header = new HttpHeaders();
-			String contentType = Files.probeContentType(file.toPath());
-			contentType = contentType == null ? "image/jpeg" : contentType;
 			header.add("Content-Type", contentType);
 			byte[] result = FileCopyUtils.copyToByteArray(file);
 			return new ResponseEntity<byte[]>(result, header, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.internalServerError().build();
 		}
 	}
 
 	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public ResponseEntity<Resource> download(String fileName) {
-		File file = new File(DEFAULT_DERECTORY, fileName);
+	public ResponseEntity<Resource> download(String filePath, String category) {
+		File file = new File(getDefaultDirectory(category), filePath);
 		Resource resource = new FileSystemResource(file);
-		if (!file.exists()) {
-			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+		if (!resource.exists()) {
+			return ResponseEntity.notFound().build();
 		}
-		String resourceName = resource.getFilename();
-		resourceName = resourceName.substring(resourceName.indexOf("_") + 1);
+		String fileName = resource.getFilename();
+		fileName = fileName.substring(fileName.indexOf("_") + 1);
 		HttpHeaders header = new HttpHeaders();
 		try {
 			header.add("Content-Disposition",
-					"attachment;filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
+					"attachment;filename=" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
 			return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return new ResponseEntity<Resource>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.internalServerError().build();
 		}
 	}
 
@@ -77,29 +77,32 @@ public class FileController {
 		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/size/{boardNum}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Integer> getSize(@PathVariable Long boardNum) {
-		Integer size = fileService.findByBoardNum(boardNum).size();
-		return new ResponseEntity<Integer>(size, HttpStatus.OK);
-	}
-
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<FileDto>> upload(MultipartFile[] multipartFiles) {
-		String datePath = fileService.getDatePath();
-		File uploadPath = fileService.getUploadPath(DEFAULT_DERECTORY, datePath);
-		List<FileDto> files = new ArrayList<>();
-		if (multipartFiles == null || multipartFiles.length == 0) {
-			return new ResponseEntity<List<FileDto>>(HttpStatus.OK);
+	public ResponseEntity<List<FileDto>> upload(MultipartFile[] multipartFiles, String category) {
+		if (multipartFiles == null) {
+			return ResponseEntity.badRequest().build();
 		}
+		List<FileDto> files = new ArrayList<>();
 		for (MultipartFile multipartFile : multipartFiles) {
 			try {
-				FileDto fileDto = fileService.upload(multipartFile, uploadPath, datePath);
+				FileDto fileDto = fileService.upload(multipartFile, getDefaultDirectory(category),
+						DateUtil.getDatePath());
 				files.add(fileDto);
 			} catch (Exception e) {
 				e.printStackTrace();
-				return new ResponseEntity<List<FileDto>>(HttpStatus.BAD_REQUEST);
+				continue;
 			}
 		}
 		return new ResponseEntity<List<FileDto>>(files, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/count/{boardNum}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public int count(@PathVariable Long boardNum) {
+		return fileService.findByBoardNum(boardNum).size();
+	}
+
+	private String getDefaultDirectory(String category) {
+		return "download".equals(category) ? DOWNLOAD_DIRECTORY : DEFAULT_DIRECTORY;
+	}
+
 }

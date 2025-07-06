@@ -14,5 +14,7 @@ public interface FileMapper {
 
 	public abstract int deleteByFileNum(Long fileNum);
 	
+	public abstract int countByBoardNum(Long boardNum);
+	
 	public abstract List<FileDto> findByYesterDay();
 }

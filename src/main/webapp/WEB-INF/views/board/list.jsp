@@ -19,13 +19,8 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 	<main class="main">
 			<div class="list-container">
-					<table>
-						<c:if test="${criteria.category eq 'free' and !sessionScope.isAdmin}">
-							<caption>
-								<a href="<c:url value='/board/write${criteria.params}' />">글쓰기</a>
-							</caption>
-						</c:if>
-						<c:if test="${!writable and sessionScope.isAdmin}">
+				    <table>
+						<c:if test="${writable || isAdmin}">
 							<caption>
 								<a href="<c:url value='/board/write${criteria.params}' />">글쓰기</a>
 							</caption>

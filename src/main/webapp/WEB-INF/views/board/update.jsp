@@ -28,8 +28,8 @@
                         <input type="text" class="title-input" name="boardTitle" placeholder="제목을 입력하세요" maxlength="55" value="${board.boardTitle}"/>
                     </h1>
                     <div class="btn-group">
-                        <a href="<c:url value='/board/detail${criteria.params}&boardNum=${board.boardNum}'/>" class="btn"><i class="fa fa-bars"></i> 취소</a>
-                        <a href="#" class="btn updateBoardBtn" data-form-class="update-form"><i class="fa fa-pencil"></i> 등록</a>
+                        <a href="<c:url value='/board/detail${criteria.params}&boardNum=${board.boardNum}' />" class="btn"><i class="fa fa-bars"></i> 취소</a>
+                        <a href="#" class="btn update-board-btn" data-form-class="update-form"><i class="fa fa-pencil"></i> 등록</a>
                     </div>
                 </div>
 
@@ -39,7 +39,12 @@
                     <span>조회수: <c:out value="${board.boardReadCount}" /></span>
                     <span>댓글: <c:out value="${board.boardCommentCount}" /></span>
                 </div>
-                 <c:if test="${sessionScope.isUserRole}">
+                <c:if test="${not empty board.boardLinkUrl}">
+	                <div class="link-url-box">
+					 	<input type="text" name="boardLinkUrl" class="board-link-input" value="${board.boardLinkUrl}" placeholder="이동 할 링크 (생략가능)"/>
+		        	</div>
+	        	</c:if>
+                <c:if test="${not empty board.boardVideoId}">
 	                <div class="video-id-box">
 				          <input type="text" name="boardVideoId" class="video-id-input" placeholder="유튜브 영상 ID (생략가능)"/>
 	        		</div>
@@ -51,8 +56,8 @@
                     <div class="board-content-line"></div>
                 </article>
                 <input type="file" name="multipartFiles" multiple data-update="update"/>
-	            <div class="thumbnailDiv">
-		            <ul class="thumbnailUl"></ul>
+	            <div class="thumbnail-div">
+		            <ul class="thumbnail-ul"></ul>
 		        </div>   
             </div>   
         </form>
@@ -71,6 +76,6 @@
 <script src="<c:url value='/static/js/file.js' />"></script>
 <script src="<c:url value='/static/js/board.js' />"></script>
 <script>
-    showThumbnails($thumbnailUl, boardNum, false);
+    
 </script>
 </html>

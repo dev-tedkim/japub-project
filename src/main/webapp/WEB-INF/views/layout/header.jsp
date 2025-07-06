@@ -45,7 +45,9 @@
         <ul class="submenu">
           <li><a href="<c:url value='/board/list?category=free' />">자유게시판</a></li>
           <li><a href="<c:url value='/board/list?category=notice' />">공지사항</a></li>
-          <li><a href="<c:url value='/board/list?category=upload' />">자료실</a></li>
+          <li><a href="<c:url value='/board/list?category=media' />">미디어 리뷰</a></li>
+          <li><a href="<c:url value='/board/list?category=download' />">자료실</a></li>
+          
         </ul>
       </li>
 

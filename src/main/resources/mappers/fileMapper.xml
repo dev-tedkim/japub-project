@@ -10,15 +10,20 @@
 	</insert>
 	
 	<select id="findByBoardNum" resultType="fileDto">
-		SELECT file_num, file_uuid, file_upload_path, file_type, file_name, board_num, file_size
-		FROM tbl_file
-		WHERE board_num = #{boardNum}
+		SELECT file_num, file_uuid, file_upload_path, file_type, file_name, f.board_num, file_size, board_category
+		FROM tbl_board b join tbl_file f on b.board_num = f.board_num
+		WHERE f.board_num = #{boardNum}
 	</select>
 	
 	<delete id="deleteByFileNum">
 		DELETE FROM tbl_file 
 		WHERE file_num = #{fileNum}
 	</delete>
+	
+	<select id="countByBoardNum" resultType="_int">
+		SELECT count(file_num) FROM tbl_file
+		WHERE board_num = #{boardNum}
+	</select>
 	
 	<select id="findByYesterDay" resultType="fileDto">
 		SELECT * FROM tbl_file WHERE file_upload_path  = DATE_FORMAT(current_timestamp  - INTERVAL 1 DAY, '%Y/%m/%d')

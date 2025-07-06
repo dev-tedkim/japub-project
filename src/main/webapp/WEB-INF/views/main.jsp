@@ -120,17 +120,17 @@
         <div class="layout-box">
           <div class="notice">
             <div class="notice-header">
-              <h2>공지사항</h2>
-              <a href="<c:url value='/board/list?category=notice' />" class="notice-btn">+</a>
+              <h2>미디어 리뷰</h2>
+              <a href="<c:url value='/board/list?category=media' />" class="notice-btn">+</a>
             </div>
             <div class="notice-body">
               <ul>
-                <c:forEach items="${noticeBoards}" var="notice" begin="0" end="4">
+                <c:forEach items="${mediaBoards}" var="media" begin="0" end="4">
                   <li>
                   	  <c:set var="referrer" value="main"/>
-	                  <a href="<c:url value='/board/detail?category=${notice.boardCategory}&referrer=${referrer}&boardNum=${notice.boardNum}' />">
-	                      <div class="notice-content">${notice.boardTitle}</div>
-	                      <div class="notice-date">${notice.boardRegisterDate}</div>
+	                  <a href="<c:url value='/board/detail?category=${media.boardCategory}&referrer=${referrer}&boardNum=${media.boardNum}' />">
+	                      <div class="notice-content">${media.boardTitle}</div>
+	                      <div class="notice-date">${media.boardRegisterDate}</div>
 	                  </a>
                   </li>
                 </c:forEach>
@@ -143,15 +143,15 @@
           <div class="notice">
             <div class="notice-header">
               <h2>자료실</h2>
-              <a href="<c:url value='/board/list?category=upload' />" class="notice-btn">+</a>
+              <a href="<c:url value='/board/list?category=download' />" class="notice-btn">+</a>
             </div>
             <div class="notice-body">
               <ul>
-                <c:forEach items="${uploadBoards}" var="upload" begin="0" end="4">
+                <c:forEach items="${downloadBoards}" var="download" begin="0" end="4">
                   <li>
-                    <a href="<c:url value='/board/detail?category=${upload.boardCategory}&referrer=${referrer}&boardNum=${upload.boardNum}' />">
-                      <div class="notice-content">${upload.boardTitle}</div>
-                      <div class="notice-date">${upload.boardRegisterDate}</div>
+                    <a href="<c:url value='/board/detail?category=${download.boardCategory}&referrer=${referrer}&boardNum=${download.boardNum}' />">
+                      <div class="notice-content">${download.boardTitle}</div>
+                      <div class="notice-date">${download.boardRegisterDate}</div>
                     </a>
                   </li>
                 </c:forEach>

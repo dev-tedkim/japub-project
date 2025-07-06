@@ -10,6 +10,7 @@ public class MessageConstants {
 	public static final String ADMIN_NOT_FOUND_MSG = "이 작업은 관리자 권한을 가진 사용자만 수행할 수 있습니다.";
 	public static final String USER_NOT_FOUND_MSG = "존재하지 않는 회원 입니다.";
 	public static final String CATEGORY_NOT_FOUND_MSG = "카테고리가 없거나 유효하지 않은 카테고리 입니다.";
+	public static final String BOARD_NO_PERMISSION_MSG = "해당 게시글을 수정하거나 삭제할 수 있는 권한이 없습니다.";
 	public static final String SUCCESS_KEY = "success";
 	public static final String SUCCESS_VALUE = "success";
 	public static final String LOGIN_URL = "redirect:/login";

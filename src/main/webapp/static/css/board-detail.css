@@ -70,8 +70,17 @@ h1.title {
 	padding: 20px;
 }
 
+.media-box>.link-box {
+	font-size: 1.1rem;
+	color: #222;
+	line-height: 1.5;
+	padding: 20px;
+	display: flex;
+	align-items: center;
+}
+
 .img-box img {
-	max-width: 100%;
+	max-width: 80%;
 	height: auto;
 	margin: auto;
 	display: block;

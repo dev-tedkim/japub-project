@@ -11,4 +11,5 @@ public class FileDto {
 	private String fileName;
 	private Long fileSize;
 	private Long boardNum;
+	private String filePath;
 }

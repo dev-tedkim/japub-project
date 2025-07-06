@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.app.japub.common.DateUtil;
 import com.app.japub.common.MessageConstants;
 import com.app.japub.common.SessionUtil;
 import com.app.japub.domain.dto.Criteria;
@@ -77,7 +78,7 @@ public class ProductController {
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
-		String datePath = fileService.getDatePath();
+		String datePath = DateUtil.getDatePath();
 		File uploadPath = fileService.getUploadPath(DEFAULT_DERECTORY, datePath);
 		if (!productService.insert(multipartFile, productDto, uploadPath, datePath)) {
 			attributes.addFlashAttribute("msg", MessageConstants.ERROR_MSG);
@@ -111,7 +112,7 @@ public class ProductController {
 		if (redirect != null) {
 			return redirect; // 관리자 아니면 리다이렉트
 		}
-		String datePath = fileService.getDatePath();
+		String datePath = DateUtil.getDatePath();
 		File uploadPath = fileService.getUploadPath(DEFAULT_DERECTORY, datePath);
 		if (!productService.update(multipartFile, productDto, uploadPath, datePath)) {
 			attributes.addFlashAttribute("msg", MessageConstants.ERROR_MSG);

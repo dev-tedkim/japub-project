@@ -81,7 +81,7 @@ $("input[name=userId]").on("blur", function(e) {
 	const userId = $input.val().trim();
 	if (!userId || $input.prop("readonly")) { return; }
 	const isSuccess = validateId(userId);
-	const msg = isSuccess ? "" : "잘못된 아이디 입니다.";
+	const msg = isSuccess ? "" : "잘못된 아이디 형식입니다.";
 	changeCss($input, isSuccess, msg);
 	setValidationCheck($input, validationChecks, isSuccess);
 	if (!isSuccess) { return; }
@@ -97,7 +97,7 @@ $("input[name=userEmail]").on("blur", function(e) {
 	const userEmail = $input.val().trim();
 	if (!userEmail || $input.prop("readonly")) { return; }
 	const isSuccess = validateEmail(userEmail);
-	const msg = isSuccess ? "" : "잘못된 이메일 입니다.";
+	const msg = isSuccess ? "" : "잘못된 이메일 형식입니다.";
 	changeCss($input, isSuccess, msg);
 	setValidationCheck($input, validationChecks, isSuccess);
 	if (!isSuccess) { return; }

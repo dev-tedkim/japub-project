@@ -45,26 +45,20 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void insert(BoardDto BoardDto) {
-		try {
-			boardDao.insert(BoardDto);
-			fileService.insertFiles(BoardDto);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("boardService insert error", e);
+	public void insert(BoardDto boardDto) {
+		if (boardDao.insert(boardDto) != DbConstants.SUCCESS_CODE) {
+			throw new RuntimeException("boardService insert error");
 		}
+		fileService.insertFiles(boardDto);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void update(BoardDto BoardDto) {
-		try {
-			fileService.deleteFiles(BoardDto);
-			fileService.insertFiles(BoardDto);
-			boardDao.update(BoardDto);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("boardService insert error", e);
+	public void update(BoardDto boardDto) {
+		fileService.insertFiles(boardDto);
+		fileService.deleteFiles(boardDto);
+		if (boardDao.update(boardDto) != DbConstants.SUCCESS_CODE) {
+			throw new RuntimeException("boardService update error");
 		}
 	}
 

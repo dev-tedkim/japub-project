@@ -2,6 +2,7 @@ package com.app.japub.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -13,5 +14,15 @@ public class DateUtil {
 			e.printStackTrace();
 			return boardRegisterDate;
 		}
+	}
+
+	public static String getDatePath() {
+		return new SimpleDateFormat("yyyy/MM/dd").format(new Date()).toString();
+	}
+
+	public static String getYesterDayPath() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -1);
+		return new SimpleDateFormat("yyyy/MM/dd").format(calendar.getTime()).toString();
 	}
 }
