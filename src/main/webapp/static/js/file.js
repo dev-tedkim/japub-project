@@ -8,8 +8,6 @@ const updateClassName = "new";
 const defaultClassName = "original";
 const isUpdate = $fileInput.data("update");
 const category = $("div.container").data("boardCategory");
-let totalSize = 0;
-let totalCount = 0;
 const fileService = (function() {
 	function upload(formData, category, callback) {
 		$.ajax({
@@ -41,39 +39,31 @@ const fileService = (function() {
 
 	return { upload, getFiles, getCount };
 })();
+let totalSize = 0;
+let totalCount = 0;
+let removeFileCount = 0;
+
 $fileInput.on("change", function() {
-	const formData = new FormData();
 	const maxCount = 2;
 	const files = Array.from($fileInput[0].files);
-	if (!validateFileType($fileInput, files, category)) { refreshFileInput($fileInput, fileArray); console.log("들어옴"); return; }
-	totalCount = fileArray.length + files.length;
+	const formData = new FormData();
+	totalCount = removeFileCount + fileArray.length + files.length;
 	if (boardNum) { fileService.getCount(boardNum, count => totalCount += count); }
 	if (totalCount > maxCount) { alert("파일은 최대 2개까지만 업로드할 수 있습니다."); refreshFileInput($fileInput, fileArray); return; }
 	files.forEach(file => {
-		if (!validateFile(file.name, file.size)) { return false; }
+		if (!validateFileSize(file.size)) { return false; }
+		if (!validateFileType(file.type, category)) { return false; }
+		if (!validateFileName(file.name)) { return false; }
+		formData.append("multipartFiles", file);
 		fileArray.push(file);
 		fileSizeArray.push(file.size);
-		formData.append("multipartFiles", file);
 	});
-	isUpdate ? fileService.upload(formData, category, files => appendThumbnails({ $ul: $thumbnailUl, files, isUpdate: true })) : fileService.upload(formData, category, files => appendThumbnails({ $ul: $thumbnailUl, files }));
+	const isEmpty = formDataIsEmpty(formData);
+	if (!isEmpty) {
+		isUpdate ? fileService.upload(formData, category, files => appendThumbnails({ $ul: $thumbnailUl, files, isUpdate: true })) : fileService.upload(formData, category, files => appendThumbnails({ $ul: $thumbnailUl, files }));
+	}
 	refreshFileInput($fileInput, fileArray);
 });
-
-
-function validateFileType($fileInput, files, category) {
-	const imageOnlyCategory = "free";
-	if (!category || imageOnlyCategory != category) { return true; }
-	if (!files || files.length == 0) { return; }
-	for (let file of files) {
-		const isImage = file.type.startsWith("image/");
-		if (!isImage) {
-			alert("이미지 파일만 업로드할 수 있습니다.");
-			$fileInput.val("");
-			return false;
-		}
-	}
-	return true;
-}
 
 $thumbnailUl.on("click", ".file-cancel-btn", function(e) {
 	e.preventDefault();
@@ -90,14 +80,22 @@ $thumbnailUl.on("click", ".file-cancel-btn", function(e) {
 
 	index = $(`li.${updateClassName}`).index($li);
 
-	if (index != -1) {
+	if (index != -1) {/*용량제거 필요*/
 		refreshFileInput($fileInput, fileArray, index);
+		removeFileSize(fileSizeArray, index);
 		$li.remove();
 	} else {
-		removeFileSize(fileSizeArray, index);
-		$li.attr("class", deleteClassName).hide(); /*용량제거 필요*/
+		$li.attr("class", deleteClassName).hide();
+		--removeFileCount;
 	}
 });
+
+function formDataIsEmpty(formData) {
+	for (let entries of formData.entries()) {
+		return false;
+	}
+	return true;
+}
 
 function removeFileSize(fileSizeArray, index) {
 	totalSize -= fileSizeArray[index];
@@ -160,20 +158,30 @@ function createThumbnails(files, isDownload = false, isUpdate = false) {
 }
 
 function validateFileSize(fileSize) {
-	const maxSize = 1024 * 1024 * 20;
+	const maxFileSize = 1024 * 1024 * 200;
 	totalSize += fileSize;
-	if (maxSize < totalSize) {
+	if (maxFileSize < totalSize) {
 		totalSize -= fileSize;
+		alert("업로드 가능한 용량을 초과하였습니다.");
 		return false;
 	}
 	return true;
 }
 
-function validateFile(fileName, fileSize) {
-	if (!validateFileSize(fileSize)) {
-		alert("업로드 가능한 용량을 초과하였습니다.");
+function validateFileType(fileType, category) {
+	const onlyImageCategory = "free";
+	if (category != onlyImageCategory) {
+		return true;
+	}
+	const isImage = fileType.startsWith("image/");
+	if (!isImage) {
+		alert("이미지만 업로드 가능합니다.");
 		return false;
 	}
+	return true;
+}
+
+function validateFileName(fileName) {
 	let regExp = new RegExp("(.*/)\.(exe|sh|alz)$", "i");
 	if (regExp.test(fileName)) {
 		alert("업로드 가능한 파일 형식이 아닙니다.");

@@ -1,6 +1,5 @@
 com\app\japub\domain\service\board\BoardServiceImpl.class
 com\app\japub\domain\service\product\ProductServiceImpl.class
-com\app\japub\controller\AdminController.class
 com\app\japub\controller\FindAccountController.class
 com\app\japub\domain\dao\board\BoardDao.class
 com\app\japub\domain\mapper\ProductMapper.class
@@ -12,6 +11,7 @@ com\app\japub\domain\service\user\MailService.class
 com\app\japub\domain\mapper\AdminMapper.class
 com\app\japub\domain\dao\product\ProductDaoImpl.class
 com\app\japub\domain\mapper\FileMapper.class
+com\app\japub\common\ViewPathUtil.class
 com\app\japub\controller\ErrorController.class
 com\app\japub\controller\LoginController.class
 com\app\japub\domain\dao\file\FileDao.class

@@ -14,7 +14,6 @@ C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\dao\comment\Com
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\controller\ProductController.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\service\file\FileServiceImpl.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\common\SessionUtil.java
-C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\controller\AdminController.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\service\admin\AdminService.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\dao\admin\AdminDao.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\dto\CommentDto.java
@@ -45,6 +44,7 @@ C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\dto\ProductDto.
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\controller\LoginController.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\service\user\UserServiceImpl.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\service\file\FileService.java
+C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\common\ViewPathUtil.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\dao\board\BoardDaoImpl.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\service\user\PasswordService.java
 C:\spring_kyj\workspace\japub\src\main\java\com\app\japub\domain\service\board\BoardServiceImpl.java

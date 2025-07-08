@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="icon" href="<c:url value='/static/images/logo/favicon.png' />" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
@@ -19,13 +20,8 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 	<main class="main">
 			<div class="list-container">
-					<table>
-						<c:if test="${criteria.category eq 'free' and !sessionScope.isAdmin}">
-							<caption>
-								<a href="<c:url value='/board/write${criteria.params}' />">글쓰기</a>
-							</caption>
-						</c:if>
-						<c:if test="${!writable and sessionScope.isAdmin}">
+				    <table>
+						<c:if test="${writable || isAdmin}">
 							<caption>
 								<a href="<c:url value='/board/write${criteria.params}' />">글쓰기</a>
 							</caption>

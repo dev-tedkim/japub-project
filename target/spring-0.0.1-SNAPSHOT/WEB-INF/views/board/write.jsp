@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
+    <link rel="icon" href="<c:url value='/static/images/logo/favicon.png' />" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -17,26 +18,27 @@
     <jsp:include page="/WEB-INF/views/layout/header.jsp" />
     <main class="main">
         <form name="registerForm" class="write-form" method="post" autocomplete="off">
-            <div class="container">
+            <div class="container" data-board-category="${criteria.category}">
                 <div class="header-with-buttons">
                     <h1 class="title">
                         <input type="text" class="title-input" name="boardTitle" placeholder="제목을 입력하세요" maxlength="55" value="${board.boardTitle}"/>
                     </h1>
                     <div class="btn-group">
                         <a href="<c:url value='/board/list${criteria.params}' />" class="btn"><i class="fa fa-bars"></i> 취소</a>
-                        <a href="#" class="btn writeBoardBtn" data-form-class="write-form"><i class="fa fa-pencil"></i> 등록</a>
+                        <a href="#" class="btn write-board-btn" data-form-class="write-form"><i class="fa fa-pencil"></i> 등록</a>
                     </div>
                 </div>
 
                 <div class="post-info">
                     <span><i class="fa fa-user-circle"></i><c:out value="${userId}" /></span>
-                   <%--  <span><i class="fa fa-calendar"></i><c:out value="${board.boardRegisterDate}" /></span>
-                    <span>조회수: <c:out value="${board.boardReadCount}" /></span>
-                    <span>댓글: <c:out value="${board.boardCommentCount}" /></span> --%>
                 </div>
-                <c:if test="${sessionScope.isUserRole}">
+                <c:set var="category" value="media"/>
+                <c:if test="${sessionScope.isAdmin and criteria.category eq category}">
+	                <div class="link-url-box">
+				    	<input type="text" name="boardLinkUrl" class="board-link-input" placeholder="이동 할 링크 (생략가능)"/>
+	        		</div>
 	                <div class="video-id-box">
-				          <input type="text" name="boardVideoId" class="video-id-input" placeholder="유튜브 영상 ID (생략가능)"/>
+				    	<input type="text" name="boardVideoId" class="video-id-input" placeholder="유튜브 영상 ID (생략가능)"/>
 	        		</div>
         		</c:if>
                 <article class="post-content">
@@ -45,11 +47,9 @@
                     </div>
                     <div class="board-content-line"></div>
                 </article>
-                <c:if test="${sessionScope.isAdmin}">
-                	<input type="file" name="multipartFiles" multiple />
-                </c:if>
-	            <div class="thumbnailDiv">
-		            <ul class="thumbnailUl"></ul>
+ 				<input type="file" name="multipartFiles" multiple />
+	            <div class="thumbnail-div">
+		            <ul class="thumbnail-ul"></ul>
 		        </div>   
             </div>   
         </form>

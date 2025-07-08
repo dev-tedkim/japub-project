@@ -186,7 +186,7 @@ function createComments(commentsDto) {
 
 function createButtons(sessionUserNum, isAdmin, comment) {
 	const isMycomment = sessionUserNum == comment.userNum;
-	const canReply = !isMycomment && (comment.commentParentNum == comment.commentNum);
+	const canReply = sessionUserNum && !isMycomment && (comment.commentParentNum == comment.commentNum);
 	let html = "";
 	if (isAdmin || isMycomment) {
 		html += `<a href="#" class="comment-update-btn">수정</a>`;

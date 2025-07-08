@@ -111,11 +111,11 @@ div.board-content-line {
 	border-bottom: 1px solid #dedede;
 }
 
-ul.thumbnailUl {
+ul.thumbnail-ul {
 	display: flex;
 }
 
-div.thumbnailDiv {
+div.thumbnail-div {
 	margin: 20px 0;
 }
 

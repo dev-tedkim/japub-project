@@ -26,7 +26,7 @@
             <a class="menu-link" href="#">마이페이지</a>
             <ul class="submenu">
               <li><a href="<c:url value='/mypage/check-password' />">비밀번호 변경</a></li>
-              <li><a href="<c:url value='/mypage/check-password?action=delete' />">회원탈퇴</a></li>
+              <li><a href="<c:url value='/mypage/check-password?isDelete=true' />">회원탈퇴</a></li>
             </ul>
           </li>
         </c:otherwise>
@@ -45,7 +45,9 @@
         <ul class="submenu">
           <li><a href="<c:url value='/board/list?category=free' />">자유게시판</a></li>
           <li><a href="<c:url value='/board/list?category=notice' />">공지사항</a></li>
-          <li><a href="<c:url value='/board/list?category=upload' />">자료실</a></li>
+          <li><a href="<c:url value='/board/list?category=media' />">미디어 리뷰</a></li>
+          <li><a href="<c:url value='/board/list?category=download' />">자료실</a></li>
+          
         </ul>
       </li>
 

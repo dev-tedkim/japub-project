@@ -1,15 +1,21 @@
 window.boardNum = $("#board-container").data("boardNum");
-const $thumbnailUl = $(".thumbnailUl");
-const fileArray = new Array();
 const $fileInput = $("input[name=multipartFiles]");
+const $thumbnailUl = $("ul.thumbnail-ul");
+const fileArray = [];
+const fileSizeArray = [];
+const deleteClassName = "remove";
+const updateClassName = "new";
+const defaultClassName = "original";
+const isUpdate = $fileInput.data("update");
+const category = $("div.container").data("boardCategory");
 const fileService = (function() {
-	function upload(formData, callback) {
+	function upload(formData, category, callback) {
 		$.ajax({
-			url: `${contextPath}/files/upload`,
+			url: `${contextPath}/files/upload?category=${category}`,
 			method: 'post',
+			data: formData,
 			contentType: false,
 			processData: false,
-			data: formData,
 			success: callback
 		});
 	}
@@ -22,97 +28,90 @@ const fileService = (function() {
 		});
 	}
 
-	function getSize(boardNum) {
-		let result;
+	function getCount(boardNum, callback) {
 		$.ajax({
-			url: `${contextPath}/files/size/${boardNum}`,
+			url: `${contextPath}/files/count/${boardNum}`,
 			method: 'get',
 			async: false,
-			success: function(size) { result = size; }
+			success: callback
 		});
-		return result;
 	}
 
-	return { upload, getFiles, getSize };
+	return { upload, getFiles, getCount };
 })();
-let totalFileSize = 0;
+let totalSize = 0;
+let totalCount = 0;
+let removeFileCount = 0;
 
 $fileInput.on("change", function() {
-	const maxSize = 3;
+	const maxCount = 2;
 	const files = Array.from($fileInput[0].files);
 	const formData = new FormData();
-	const isUpdate = $fileInput.data("update");
-	let size = boardNum ? fileService.getSize(boardNum) : 0;
-	size = size + fileArray.length + files.length;
-	if (size > maxSize) {
-		alert("파일은 최대 3개까지만 업로드할 수 있습니다.");
-		$fileInput.val("");
-		resetFileInput($fileInput, fileArray);
-		return;
-	}
+	totalCount = removeFileCount + fileArray.length + files.length;
+	if (boardNum) { fileService.getCount(boardNum, count => totalCount += count); }
+	if (totalCount > maxCount) { alert("파일은 최대 2개까지만 업로드할 수 있습니다."); refreshFileInput($fileInput, fileArray); return; }
 	files.forEach(file => {
-		if (!validateFile(file.name, file.size)) { return false; }
+		if (!validateFileSize(file.size)) { return false; }
+		if (!validateFileType(file.type, category)) { return false; }
+		if (!validateFileName(file.name)) { return false; }
 		formData.append("multipartFiles", file);
 		fileArray.push(file);
+		fileSizeArray.push(file.size);
 	});
-	if (isUpdate) {
-		fileService.upload(formData, files => appendThumbnails({ $ul: $thumbnailUl, files, isUpdate: true }));
-	} else {
-		fileService.upload(formData, files => appendThumbnails({ $ul: $thumbnailUl, files }));
+	const isEmpty = formDataIsEmpty(formData);
+	if (!isEmpty) {
+		isUpdate ? fileService.upload(formData, category, files => appendThumbnails({ $ul: $thumbnailUl, files, isUpdate: true })) : fileService.upload(formData, category, files => appendThumbnails({ $ul: $thumbnailUl, files }));
 	}
-	resetFileInput($fileInput, fileArray);
+	refreshFileInput($fileInput, fileArray);
 });
 
 $thumbnailUl.on("click", ".file-cancel-btn", function(e) {
 	e.preventDefault();
 	const $li = $(this).closest("li");
-	const isUpdate = $fileInput.data("update");
 	let index;
-	if (!isUpdate) {
-		index = $(".file-cancel-btn").index($(this));
-		resetFileInputByIndex($fileInput, fileArray, index);
+
+	if (!isUpdate) {/*용량제거 필요*/
+		index = $("img.file-cancel-btn").index($(this));
+		refreshFileInput($fileInput, fileArray, index);
+		removeFileSize(fileSizeArray, index)
 		$li.remove();
 		return;
 	}
-	index = $("li.new").index($li);
-	if (index != -1) {
-		resetFileInputByIndex($fileInput, fileArray, index);
+
+	index = $(`li.${updateClassName}`).index($li);
+
+	if (index != -1) {/*용량제거 필요*/
+		refreshFileInput($fileInput, fileArray, index);
+		removeFileSize(fileSizeArray, index);
 		$li.remove();
 	} else {
-		$li.attr("class", "remove").hide();
+		$li.attr("class", deleteClassName).hide();
+		--removeFileCount;
 	}
 });
 
-function resetFileInput($fileInput, fileArray) {
-	const dataTransfer = new DataTransfer();
-	fileArray.forEach(file => dataTransfer.items.add(file));
-	$fileInput[0].files = dataTransfer.files;
+function formDataIsEmpty(formData) {
+	for (let entries of formData.entries()) {
+		return false;
+	}
+	return true;
 }
 
-function resetFileInputByIndex($fileInput, fileArray, index) {
-	const dataTransfer = new DataTransfer();
-	fileArray.splice(index, 1);
-	fileArray.forEach(file => dataTransfer.items.add(file));
-	$fileInput[0].files = dataTransfer.files;
+function removeFileSize(fileSizeArray, index) {
+	totalSize -= fileSizeArray[index];
+	fileSizeArray.splice(index, 1);
+}
+
+function getDeleteClassName() {
+	return deleteClassName;
+}
+
+function getUpdateClassName() {
+	return updateClassName;
 }
 
 function showThumbnails($ul, boardNum, isDownload) {
-	fileService.getFiles(boardNum, files => appendThumbnails({ $ul, files, isDownload }));
-}
-
-function createFileInfoInputs($ul, className) {
-	const $liElements = $ul.find(`li.${className}`);
-	let html = "";
-	let name = className == 'remove' ? 'deleteFiles' : 'files';
-	$liElements.each((i, li) => {
-		html += `<input type="hidden" name="${name}[${i}].fileNum" value="${li.dataset.fileNum}" />`;
-		html += `<input type="hidden" name="${name}[${i}].fileUuid" value="${li.dataset.fileUuid}" />`;
-		html += `<input type="hidden" name="${name}[${i}].fileUploadPath" value="${li.dataset.uploadPath}" />`;
-		html += `<input type="hidden" name="${name}[${i}].fileName" value="${li.dataset.fileName}" />`;
-		html += `<input type="hidden" name="${name}[${i}].fileType" value="${li.dataset.fileType}" />`;
-		html += `<input type="hidden" name="${name}[${i}].fileSize" value="${li.dataset.fileSize}" />`;
-	});
-	return html;
+	fileService.getFiles(boardNum, (files) => appendThumbnails({ $ul, files, isDownload }));
 }
 
 function appendThumbnails({ $ul, files, isDownload, isUpdate }) {
@@ -120,16 +119,37 @@ function appendThumbnails({ $ul, files, isDownload, isUpdate }) {
 	$ul.append(html);
 }
 
+function refreshFileInput($fileInput, fileArray, index = -1) {
+	const dataTransfer = new DataTransfer();
+	if (index >= 0) { fileArray.splice(index, 1); }
+	fileArray.forEach(file => dataTransfer.items.add(file));
+	$fileInput[0].files = dataTransfer.files;
+}
+
+function createHiddenInputs($ul, className = defaultClassName) {
+	const name = className == deleteClassName ? "deleteFiles" : "insertFiles";
+	let html = "";
+	$ul.find(`li.${className}`).each((i, li) => {
+		html += `<input type="hidden" name="${name}[${i}].fileNum" value="${li.dataset.fileNum}" />`;
+		html += `<input type="hidden" name="${name}[${i}].fileUuid" value="${li.dataset.fileUuid}" />`;
+		html += `<input type="hidden" name="${name}[${i}].fileUploadPath" value="${li.dataset.fileUploadPath}" />`;
+		html += `<input type="hidden" name="${name}[${i}].fileName" value="${li.dataset.fileName}" />`;
+		html += `<input type="hidden" name="${name}[${i}].fileSize" value="${li.dataset.fileSize}" />`;
+		html += `<input type="hidden" name="${name}[${i}].fileType" value="${li.dataset.fileType}" />`;
+	});
+	return html;
+}
+
 function createThumbnails(files, isDownload = false, isUpdate = false) {
 	let html = "";
 	files.forEach(file => {
-		let displayFileName = encodeURIComponent(`${file.fileUploadPath}/${file.fileUuid}_${file.fileName}`);
-		let downloadFileName = displayFileName.replace("t_", "");
-		let fileNum = `${file.fileNum == null ? '' : file.fileNum}`;
-		let className = isUpdate ? 'new' : 'original';
-		html += `<li class="${className}" data-file-num="${fileNum}" data-file-uuid="${file.fileUuid}" data-upload-path="${file.fileUploadPath}" data-file-name="${file.fileName}" data-file-size="${file.fileSize}" data-file-type="${file.fileType}">`;
-		html += isDownload ? `<a href="${contextPath}/files/download?fileName=${downloadFileName}">` : ``;
-		html += file.fileType ? `<img src="${contextPath}/files/display?fileName=${displayFileName}" width="100" />` : `<img src="${contextPath}/static/images/file/attach.png" width="100" />`;
+		const displayFilePath = encodeURIComponent(`${file.fileUploadPath}/t_${file.fileUuid}_${file.fileName}`);
+		const downloadFilePath = displayFilePath.replace("t_", "");
+		const fileNum = file.fileNum ? file.fileNum : "";
+		const className = isUpdate ? updateClassName : defaultClassName;
+		html += `<li class="${className}" data-file-num="${fileNum}" data-file-uuid="${file.fileUuid}" data-file-upload-path="${file.fileUploadPath}" data-file-name="${file.fileName}" data-file-size="${file.fileSize}" data-file-type="${file.fileType}">`;
+		html += isDownload ? `<a href="${contextPath}/files/download?filePath=${downloadFilePath}&category=${category}">` : ``;
+		html += file.fileType ? `<img src="${contextPath}/files/display?filePath=${displayFilePath}&category=${category}" width="100" />` : `<img src="${contextPath}/static/images/file/attach.png" width="100" />`;
 		html += isDownload ? `</a>` : ``;
 		html += !isDownload ? `<img class="file-cancel-btn" src="${contextPath}/static/images/file/cancel.png" width="25" />` : ``;
 		html += `</li>`;
@@ -137,53 +157,35 @@ function createThumbnails(files, isDownload = false, isUpdate = false) {
 	return html;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 function validateFileSize(fileSize) {
-	const maxSize = 1024 * 1024 * 200;
-	totalFileSize += fileSize;
-	if (maxSize < totalFileSize) {
+	const maxFileSize = 1024 * 1024 * 200;
+	totalSize += fileSize;
+	if (maxFileSize < totalSize) {
+		totalSize -= fileSize;
 		alert("업로드 가능한 용량을 초과하였습니다.");
-		totalFileSize -= fileSize;
 		return false;
 	}
 	return true;
 }
 
-function validateFile(fileName, fileSize) {
-	let regExp = new RegExp("\\.(exe|sh|alz)$", "i");
-	if (regExp.test(fileName)) {
-		alert("업로드 가능한 파일 형식이 아닙니다.");
-		return false;
+function validateFileType(fileType, category) {
+	const onlyImageCategory = "free";
+	if (category != onlyImageCategory) {
+		return true;
 	}
-	if (!validateFileSize(fileSize)) {
+	const isImage = fileType.startsWith("image/");
+	if (!isImage) {
+		alert("이미지만 업로드 가능합니다.");
 		return false;
 	}
 	return true;
 }
 
-
-/*function validateFile(fileName, fileSize) {
-	let maxSize = 1024 * 1024 * 350;
-	let regExp = new RegExp("\\.(exe|sh|alz)$", "i");
-	if (maxSize < fileSize) {
-		alert("업로드 가능한 용량을 초과하였습니다.");
-		return false;
-	}
+function validateFileName(fileName) {
+	let regExp = new RegExp("(.*/)\.(exe|sh|alz)$", "i");
 	if (regExp.test(fileName)) {
 		alert("업로드 가능한 파일 형식이 아닙니다.");
 		return false;
 	}
 	return true;
-}*/
-
-
+}

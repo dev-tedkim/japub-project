@@ -6,6 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Insert title here</title>
+  <link rel="icon" href="<c:url value='/static/images/logo/favicon.png' />" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />

@@ -6,6 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Insert title here</title>
+  <link rel="icon" href="<c:url value='/static/images/logo/favicon.png' />" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
@@ -41,7 +42,7 @@
         </div>
 
         <div class="join-input-div">
-          <input type="text" name="userPhone" placeholder="핸드폰번호" value="${user.userPhone}" />
+          <input type="text" name="userPhone" placeholder="핸드폰번호" value="${user.userPhone}" readonly="readonly" />
           <span class="error-msg"></span>
         </div>
 
