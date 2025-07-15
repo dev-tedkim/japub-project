@@ -23,10 +23,16 @@ public class MainController {
 	private final BoardService boardService;
 	private final ProductService productService;
 
+	@GetMapping("/")
+	public String home() {
+		return "forward:/main";
+	}
+
 	@GetMapping("/main")
 	public void main(Model model) {
 		List<ProductDto> recommendProducts = productService.findByProductIsRecommend(true);
-		recommendProducts.forEach(product -> product.setProductThumbnailUrl(productService.getProductThumbnailUrl(product)));
+		recommendProducts
+				.forEach(product -> product.setProductThumbnailUrl(productService.getProductThumbnailUrl(product)));
 		model.addAttribute("recommendProducts", recommendProducts);
 
 		Criteria criteria = new Criteria();

@@ -1,11 +1,10 @@
 window.boardNum = $("#board-container").data("boardNum");
 const isDetail = $("#board-container").data("boardDetail");
 const $ul = $("ul.thumbnail-ul");
-const downloadCategory = "download";
 const currentCategory = $("#board-container").data("boardCategory");
 
 (function() {
-	const isShow = isDetail && downloadCategory == currentCategory;
+	const isShow = isDetail && "download" == currentCategory;
 	if (!isShow) { return; }
 	showThumbnails($ul, boardNum, true);
 })();

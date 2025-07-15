@@ -44,7 +44,7 @@
 
             <article class="post-content">
 	            	<div class="media-box">
-	            		<c:if test="${not empty files and isShowImage}">
+	            		<c:if test="${showImage}">
 			                <div class="img-box">
 				                <c:forEach var="file" items="${files}">
 				                    <img src="<c:url value='/upload/files/${file.filePath}' />" alt="${file.fileName}" />
@@ -73,7 +73,7 @@
 							</div>
 						</c:if>
 					</div>				
-                <div class="board-content">
+                <div class="board-content" style="white-space: pre-line;">
                     <c:out value="${board.boardContent}" />
                 </div>
                 

@@ -18,7 +18,7 @@
                            
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/japub?useSSL=false&amp;serverTimezone=Asia/Seoul" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/japub?useSSL=false&amp;serverTimezone=Asia/Seoul&amp;allowPublicKeyRetrieval=true" />
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
 		<property name="username" value="root" />
 		<property name="password" value="1259014" />

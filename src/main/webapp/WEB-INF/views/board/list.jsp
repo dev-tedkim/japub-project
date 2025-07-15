@@ -21,7 +21,7 @@
 	<main class="main">
 			<div class="list-container">
 				    <table>
-						<c:if test="${writable || isAdmin}">
+						<c:if test="${writable}">
 							<caption>
 								<a href="<c:url value='/board/write${criteria.params}' />">글쓰기</a>
 							</caption>

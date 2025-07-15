@@ -43,7 +43,7 @@ public class ProductController {
 
 	private String isAdminRedirect(RedirectAttributes attributes, HttpSession session) {
 		if (!SessionUtil.isAdmin(session)) {
-			attributes.addFlashAttribute("msg", MessageConstants.ADMIN_NOT_FOUND_MSG);
+			attributes.addFlashAttribute("msg", MessageConstants.ADMIN_NOT_ALLOW_MSG);
 			return "redirect:/main";
 		}
 		return null; // 관리자일 경우 null 반환
@@ -67,7 +67,7 @@ public class ProductController {
 		if (SessionUtil.isAdmin(session)) {
 			return "products/register";
 		}
-		attributes.addFlashAttribute("msg", MessageConstants.ADMIN_NOT_FOUND_MSG);
+		attributes.addFlashAttribute("msg", MessageConstants.ADMIN_NOT_ALLOW_MSG);
 		return "redirect:/main";
 	}
 

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.app.japub.common.KeyUtil;
 import com.app.japub.common.MessageConstants;
 import com.app.japub.common.SessionUtil;
 import com.app.japub.domain.dto.UserDto;
 import com.app.japub.domain.service.user.UserService;
-import com.google.protobuf.Message;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class MypageController {
 		if (SessionUtil.getSessionNum(session) == null) {
 			return MessageConstants.LOGIN_URL;
 		}
-		addIsDeleteInModel(model, isDelete);
+		addIsDeleteToModel(model, isDelete);
 		return "mypage/check-password";
 	}
 
@@ -43,12 +43,11 @@ public class MypageController {
 		}
 		UserDto userDto = userService.findByUserNumAndUserPassword(userNum, userPassword);
 		if (userDto == null) {
-			String wrongPassword = "잘못된 비밀번호 입니다.";
-			MessageConstants.addErrorMessage(attributes, wrongPassword);
-			addIsDeleteQueryParam(attributes, isDelete);
+			MessageConstants.addErrorMessage(attributes, MessageConstants.WRONG_PASSWORD_MSG);
+			addIsDeleteToQuery(attributes, isDelete);
 			return "redirect:/mypage/check-password";
 		}
-		MessageConstants.addSuccess(attributes);
+		KeyUtil.addSuccessToFlash(attributes);
 		return isDelete ? "redirect:/mypage/delete" : "redirect:/mypage/update";
 	}
 
@@ -71,10 +70,11 @@ public class MypageController {
 		userDto.setUserNum(userNum);
 		if (!userService.update(userDto)) {
 			MessageConstants.addErrorMessage(attributes, MessageConstants.USER_NOT_FOUND_MSG);
-			MessageConstants.addSuccess(attributes);
+			KeyUtil.addSuccessToFlash(attributes);
 			return "redirect:/mypage/update";
 		}
 		session.invalidate();
+		MessageConstants.addErrorMessage(attributes, MessageConstants.PASSWORD_UPDATE_SUCCESS_MESSAGE);
 		return MessageConstants.LOGIN_URL;
 	}
 
@@ -85,12 +85,11 @@ public class MypageController {
 			return MessageConstants.LOGIN_URL;
 		}
 		if (userNum == null || !sessionUserNum.equals(userNum) || !userService.delete(userNum)) {
-			addIsDeleteQueryParam(attributes, true);
+			addIsDeleteToQuery(attributes, true);
 			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
 			return "redirect:/mypage/check-password";
 		}
-		String msg = "회원 탈퇴가 정상적으로 처리되었습니다.";
-		MessageConstants.addErrorMessage(attributes, msg);
+		MessageConstants.addErrorMessage(attributes, MessageConstants.DELETE_ACCOUNT_MSG);
 		session.invalidate();
 		return MessageConstants.LOGIN_URL;
 	}
@@ -100,31 +99,32 @@ public class MypageController {
 		if (userNum == null) {
 			return MessageConstants.LOGIN_URL;
 		}
-		boolean isSuccess = MessageConstants.isSuccess(model);
+
+		boolean isSuccess = KeyUtil.isSuccess(model);
 		if (!isSuccess) {
-			addIsDeleteQueryParam(attributes, isDelete);
+			addIsDeleteToQuery(attributes, isDelete);
 			MessageConstants.addErrorMessage(attributes, MessageConstants.ERROR_MSG);
 			return "redirect:/mypage/check-password";
 		}
 		UserDto userDto = userService.findByUserNum(userNum);
 		if (userDto == null) {
-			addIsDeleteQueryParam(attributes, isDelete);
+			addIsDeleteToQuery(attributes, isDelete);
 			MessageConstants.addErrorMessage(attributes, MessageConstants.USER_NOT_FOUND_MSG);
 			return "redirect:/mypage/check-password";
 		}
-		addUserInModel(model, userDto);
+		addUserToModel(model, userDto);
 		return isDelete ? "mypage/delete" : "mypage/update";
 	}
 
-	private void addIsDeleteInModel(Model model, boolean isDelete) {
+	private void addIsDeleteToModel(Model model, boolean isDelete) {
 		model.addAttribute(KEY_IS_DELETE, isDelete);
 	}
 
-	private void addIsDeleteQueryParam(RedirectAttributes attributes, boolean isDelete) {
+	private void addIsDeleteToQuery(RedirectAttributes attributes, boolean isDelete) {
 		attributes.addAttribute(KEY_IS_DELETE, isDelete);
 	}
 
-	private void addUserInModel(Model model, UserDto userDto) {
+	private void addUserToModel(Model model, UserDto userDto) {
 		model.addAttribute(KEY_USER, userDto);
 	}
 }

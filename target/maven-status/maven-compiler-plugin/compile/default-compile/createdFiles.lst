@@ -1,5 +1,6 @@
 com\app\japub\domain\service\board\BoardServiceImpl.class
 com\app\japub\domain\service\product\ProductServiceImpl.class
+com\app\japub\common\KeyUtil.class
 com\app\japub\controller\FindAccountController.class
 com\app\japub\domain\dao\board\BoardDao.class
 com\app\japub\domain\mapper\ProductMapper.class
